@@ -23,7 +23,7 @@ public class CatalogItem {
     private int availableStock;
     // Available stock at which we should reorder
     private int restockThreshold;
-    // Maximum number of units that can be in-stock at any time (due to physicial/logistical constraints in warehouses)
+    // Maximum number of units that can be in-stock at any time (due to physical/logistical constraints in warehouses)
     private int maxStockThreshold;
     /// <summary>
     /// True if item is on reorder
@@ -31,11 +31,9 @@ public class CatalogItem {
     private boolean onReorder;
 
     @ManyToOne
-    @JsonManagedReference
     private CatalogBrand catalogBrand;
 
     @ManyToOne
-    @JsonManagedReference
     private CatalogType catalogType;
 
     public CatalogItem() {}
@@ -96,5 +94,53 @@ public class CatalogItem {
 
     public CatalogType getCatalogType() {
         return catalogType;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setPictureFileName(String pictureFileName) {
+        this.pictureFileName = pictureFileName;
+    }
+
+    public void setPictureUri(String pictureUri) {
+        this.pictureUri = pictureUri;
+    }
+
+    public void setAvailableStock(int availableStock) {
+        this.availableStock = availableStock;
+    }
+
+    public void setRestockThreshold(int restockThreshold) {
+        this.restockThreshold = restockThreshold;
+    }
+
+    public void setMaxStockThreshold(int maxStockThreshold) {
+        this.maxStockThreshold = maxStockThreshold;
+    }
+
+    public void setOnReorder(boolean onReorder) {
+        this.onReorder = onReorder;
+    }
+
+    public void setCatalogBrand(CatalogBrand catalogBrand) {
+        this.catalogBrand = catalogBrand;
+    }
+
+    public void setCatalogType(CatalogType catalogType) {
+        this.catalogType = catalogType;
     }
 }
