@@ -104,7 +104,7 @@ public class CatalogController {
         this.catalogItemRepository.save(existingItem);
 
         if(raiseProductPriceChangedEvent) {
-            //TODO: notify catalog item update to other services
+            //TODO: send ProductPriceChangedIntegrationEvent
             // Create Integration Event to be published through Event bus
             // Achieving atomicity between original Catalog database operation and the Integration Event Log
             // Publish through the Event bus and mark the saved event as published

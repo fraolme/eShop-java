@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
+//TODO: add equals and hashcode
 @Entity
 @NamedEntityGraph(name = "catalog_item_entity_graph", attributeNodes = {
         @NamedAttributeNode("catalogBrand"),

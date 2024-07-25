@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
+//TODO: add equals and hashcode
 @Entity
 public class CatalogType{
     @Id @GeneratedValue

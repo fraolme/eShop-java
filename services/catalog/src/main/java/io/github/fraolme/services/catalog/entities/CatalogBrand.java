@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+//TODO: add equals and hashcode
 @Entity
 public class CatalogBrand {
     @Id @GeneratedValue

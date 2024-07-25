@@ -41,11 +41,13 @@ public class CatalogControllerTest {
 
     @Test
     void getItemsShouldReturnCatalogItemsPage() throws Exception {
+        // arrange
         List<CatalogItem> items = new ArrayList<CatalogItem>();
         items.add(new CatalogItem(2L, 2L, 100, ".NET Bot Black Hoodie", ".NET Bot Black Hoodie", "19.5", "1.png" ));
         var pageable = Pageable.ofSize(10).withPage(0);
         when(catalogItemRepositoryMock.findAll(pageable)).thenReturn(new PageImpl<CatalogItem>(items, pageable, 14));
 
+        // act and assert
         this.mockMvc.perform(get("/catalog/items")).andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
