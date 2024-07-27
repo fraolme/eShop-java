@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BasketController.class)
-public class BasketControllerTest {
+public class BasketControllerTests {
 
     @Autowired
     private MockMvc mockMvc;

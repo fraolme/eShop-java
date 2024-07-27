@@ -1,4 +1,4 @@
-package io.github.fraolme.services.basket.models;
+package io.github.fraolme.services.ordering.api.application.models;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -80,5 +80,9 @@ public class BasketItem {
     @Override
     public int hashCode() {
         return Objects.hash(id, productId, productName, unitPrice, oldUnitPrice, quantity, pictureUrl);
+    }
+
+    public OrderItemDTO toOrderItemDTO() {
+        return new OrderItemDTO(this.productId, this.productName, this.unitPrice, BigDecimal.ZERO, this.quantity, this.pictureUrl);
     }
 }
