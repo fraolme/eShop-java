@@ -3,12 +3,13 @@ package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggr
 import io.github.fraolme.services.ordering.api.domain.base.Entity;
 import io.github.fraolme.services.ordering.api.domain.base.IAggregateRoot;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
-import jakarta.persistence.Embedded;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+@Inheritance
 @jakarta.persistence.Entity
 public class Order extends Entity implements IAggregateRoot {
 
@@ -16,9 +17,12 @@ public class Order extends Entity implements IAggregateRoot {
     @Embedded
     private Address address;
     private Integer buyerId;
+    @ManyToOne
     private OrderStatus orderStatus;
     private String description;
     private boolean isDraft;
+
+    @OneToMany
     private List<OrderItem> orderItems;
     private Integer paymentMethodId;
 

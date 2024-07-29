@@ -1,13 +1,13 @@
 package io.github.fraolme.services.ordering.api.application.commands.handlers;
 
-import io.github.fraolme.services.ordering.api.application.commands.SetAwaitingValidationOrderStatusCommand;
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.SetPaidOrderStatusCommand;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderRepository;
-import org.axonframework.commandhandling.CommandHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetPaidOrderStatusCommandHandler {
+public class SetPaidOrderStatusCommandHandler implements Command.Handler<SetPaidOrderStatusCommand, Voidy> {
 
     private final OrderRepository orderRepository;
 
@@ -15,8 +15,8 @@ public class SetPaidOrderStatusCommandHandler {
         this.orderRepository = orderRepository;
     }
 
-    @CommandHandler
-    public void handle(SetPaidOrderStatusCommand cmd) {
+    @Override
+    public Voidy handle(SetPaidOrderStatusCommand cmd) {
         //TODO: simulate a work time for validating the payment
         var orderToUpdate = orderRepository.findById(cmd.orderNumber());
         if(orderToUpdate.isPresent()) {
@@ -24,6 +24,8 @@ public class SetPaidOrderStatusCommandHandler {
             order.setPaidStatus();
             orderRepository.save(order);
         }
+
+        return new Voidy();
     }
 
 }

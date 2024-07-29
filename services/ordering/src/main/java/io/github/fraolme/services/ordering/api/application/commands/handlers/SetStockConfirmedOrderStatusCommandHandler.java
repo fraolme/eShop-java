@@ -1,13 +1,13 @@
 package io.github.fraolme.services.ordering.api.application.commands.handlers;
 
-import io.github.fraolme.services.ordering.api.application.commands.SetAwaitingValidationOrderStatusCommand;
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.SetStockConfirmedOrderStatusCommand;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderRepository;
-import org.axonframework.commandhandling.CommandHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetStockConfirmedOrderStatusCommandHandler {
+public class SetStockConfirmedOrderStatusCommandHandler implements Command.Handler<SetStockConfirmedOrderStatusCommand, Voidy> {
 
     private final OrderRepository orderRepository;
 
@@ -15,14 +15,16 @@ public class SetStockConfirmedOrderStatusCommandHandler {
         this.orderRepository = orderRepository;
     }
 
-    @CommandHandler
-    public void handle(SetStockConfirmedOrderStatusCommand cmd) {
+    @Override
+    public Voidy handle(SetStockConfirmedOrderStatusCommand cmd) {
         var orderToUpdate = orderRepository.findById(cmd.orderNumber());
         if(orderToUpdate.isPresent()) {
             var order = orderToUpdate.get();
             order.setStockConfirmedStatus();
             orderRepository.save(order);
         }
+
+        return new Voidy();
     }
 
 }

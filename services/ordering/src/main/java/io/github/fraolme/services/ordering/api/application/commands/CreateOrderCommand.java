@@ -1,7 +1,8 @@
 package io.github.fraolme.services.ordering.api.application.commands;
 
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.models.OrderItemDTO;
-import io.github.fraolme.services.ordering.api.domain.base.ICommand;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -19,4 +20,4 @@ public record CreateOrderCommand(
         ZonedDateTime cardExpiration,
         String cardSecurityNumber,
         Integer cardTypeId
-) implements ICommand<Void> {}
+) implements Command<Voidy> {}

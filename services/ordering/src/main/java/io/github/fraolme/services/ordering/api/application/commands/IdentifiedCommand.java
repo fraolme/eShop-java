@@ -1,10 +1,10 @@
 package io.github.fraolme.services.ordering.api.application.commands;
 
-import io.github.fraolme.services.ordering.api.domain.base.ICommand;
+import an.awesome.pipelinr.Command;
 import java.util.UUID;
 
-public record IdentifiedCommand<T extends ICommand<R>, R>(
-        ICommand<R> command,
+public record IdentifiedCommand<T extends Command<R>, R>(
+        Command<R> command,
         UUID id
-)implements ICommand<R> {}
+)implements Command<R> {}
 

@@ -1,28 +1,29 @@
 package io.github.fraolme.services.ordering.api.application.commands.handlers;
 
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Pipeline;
 import io.github.fraolme.services.ordering.api.application.commands.CancelOrderCommand;
 import io.github.fraolme.services.ordering.api.application.commands.CreateOrderCommand;
 import io.github.fraolme.services.ordering.api.application.commands.IdentifiedCommand;
 import io.github.fraolme.services.ordering.api.application.commands.ShipOrderCommand;
-import io.github.fraolme.services.ordering.api.domain.base.ICommand;
-import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class IdentifiedCommandHandler {
+public class IdentifiedCommandHandler<T extends Command<R>, R> implements Command.Handler<IdentifiedCommand<T, R>, R> {
 
     private static final Logger log = LoggerFactory.getLogger(CreateOrderCommandHandler.class);
-    private final CommandGateway commandGateway;
 
-    public IdentifiedCommandHandler(CommandGateway commandGateway) {
-        this.commandGateway = commandGateway;
+    @Autowired
+    private Pipeline pipeline;
+
+    public IdentifiedCommandHandler() {
     }
 
-    @CommandHandler
-    public <T extends ICommand<R>, R> R handle(IdentifiedCommand<T,R> identifiedCommand) {
+    @Override
+    public R handle(IdentifiedCommand<T,R> identifiedCommand) {
         //TODO: idempotency check check if request is already processed by uuid
 
         //TODO: save request for idempotency check later
@@ -48,10 +49,10 @@ public class IdentifiedCommandHandler {
             }
 
             log.info("--- Sending Command: {} - {}: {} ({})", commandName, idProperty, commandId, command);
-            var result = commandGateway.sendAndWait(command);
+            var result = command.execute(pipeline);
             log.info("--- Command Result: {} - {} - {}: {} ({})", result, commandName, idProperty, commandId, command);
 
-            return (R) result;
+            return result;
         } catch (Exception ignored) {
             return null;
         }

@@ -1,14 +1,14 @@
 package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 import java.util.Objects;
 
 @Entity
 public class OrderStatus {
-    @Id @GeneratedValue
+    @Id
     private Long id;
 
     private String name;
@@ -52,10 +52,16 @@ public class OrderStatus {
         return Objects.hash(id, name);
     }
 
+    @Transient
     public static OrderStatus submitted = new OrderStatus(1L, "Submitted");
+    @Transient
     public static OrderStatus awaitingValidation = new OrderStatus(2L, "Awaiting Validation");
+    @Transient
     public static OrderStatus stockConfirmed = new OrderStatus(3L, "Stock Confirmed");
+    @Transient
     public static OrderStatus paid = new OrderStatus(4L, "Paid");
+    @Transient
     public static OrderStatus shipped = new OrderStatus(5L, "Shipped");
+    @Transient
     public static OrderStatus cancelled = new OrderStatus(6L, "Cancelled");
 }

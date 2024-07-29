@@ -2,9 +2,12 @@ package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggr
 
 import io.github.fraolme.services.ordering.api.domain.base.Entity;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
+import jakarta.persistence.Inheritance;
 
 import java.math.BigDecimal;
 
+@Inheritance
+@jakarta.persistence.Entity
 public class OrderItem extends Entity {
     private String productName;
     private String pictureUrl;

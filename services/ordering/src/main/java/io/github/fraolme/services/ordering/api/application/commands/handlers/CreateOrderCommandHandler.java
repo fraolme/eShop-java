@@ -1,16 +1,17 @@
 package io.github.fraolme.services.ordering.api.application.commands.handlers;
 
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.CreateOrderCommand;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Address;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Order;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderRepository;
-import org.axonframework.commandhandling.CommandHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreateOrderCommandHandler {
+public class CreateOrderCommandHandler implements Command.Handler<CreateOrderCommand, Voidy>{
     private final OrderRepository orderRepository;
     private static final Logger log = LoggerFactory.getLogger(CreateOrderCommandHandler.class);
 
@@ -18,8 +19,8 @@ public class CreateOrderCommandHandler {
         this.orderRepository = orderRepository;
     }
 
-    @CommandHandler
-    public void handle(CreateOrderCommand cmd) {
+    @Override
+    public Voidy handle(CreateOrderCommand cmd) {
         //TODO: add integration event to clean the basket
 
         var address = new Address(cmd.street(), cmd.city(), cmd.state(), cmd.country(), cmd.zipCode());
@@ -36,5 +37,7 @@ public class CreateOrderCommandHandler {
 
         //TODO: Unit Of Work to execute the saving of order with the Domain events in a single transaction
         orderRepository.save(order);
+
+        return new Voidy();
     }
 }

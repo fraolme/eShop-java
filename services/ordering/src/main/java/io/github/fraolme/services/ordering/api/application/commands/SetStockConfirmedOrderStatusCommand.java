@@ -1,7 +1,8 @@
 package io.github.fraolme.services.ordering.api.application.commands;
 
-import io.github.fraolme.services.ordering.api.domain.base.ICommand;
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Voidy;
 
 public record SetStockConfirmedOrderStatusCommand(
         Long orderNumber
-) implements ICommand<Void> {}
+) implements Command<Voidy> {}

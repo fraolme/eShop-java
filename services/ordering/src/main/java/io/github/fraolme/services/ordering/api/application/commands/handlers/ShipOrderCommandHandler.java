@@ -1,13 +1,13 @@
 package io.github.fraolme.services.ordering.api.application.commands.handlers;
 
-import io.github.fraolme.services.ordering.api.application.commands.SetStockConfirmedOrderStatusCommand;
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.ShipOrderCommand;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderRepository;
-import org.axonframework.commandhandling.CommandHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ShipOrderCommandHandler {
+public class ShipOrderCommandHandler implements Command.Handler<ShipOrderCommand, Voidy> {
 
     private final OrderRepository orderRepository;
 
@@ -15,14 +15,16 @@ public class ShipOrderCommandHandler {
         this.orderRepository = orderRepository;
     }
 
-    @CommandHandler
-    public void handle(ShipOrderCommand cmd) {
+    @Override
+    public Voidy handle(ShipOrderCommand cmd) {
         var orderToUpdate = orderRepository.findById(cmd.orderNumber());
         if(orderToUpdate.isPresent()) {
             var order = orderToUpdate.get();
             order.setShippedStatus();
             orderRepository.save(order);
         }
+
+        return new Voidy();
     }
 
 }

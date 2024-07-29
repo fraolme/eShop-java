@@ -1,13 +1,13 @@
 package io.github.fraolme.services.ordering.api.application.commands.handlers;
 
-import io.github.fraolme.services.ordering.api.application.commands.CancelOrderCommand;
+import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.SetAwaitingValidationOrderStatusCommand;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderRepository;
-import org.axonframework.commandhandling.CommandHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetAwaitingValidationOrderStatusCommandHandler {
+public class SetAwaitingValidationOrderStatusCommandHandler implements Command.Handler<SetAwaitingValidationOrderStatusCommand, Voidy> {
 
     private final OrderRepository orderRepository;
 
@@ -15,14 +15,16 @@ public class SetAwaitingValidationOrderStatusCommandHandler {
         this.orderRepository = orderRepository;
     }
 
-    @CommandHandler
-    public void handle(SetAwaitingValidationOrderStatusCommand cmd) {
+    @Override
+    public Voidy handle(SetAwaitingValidationOrderStatusCommand cmd) {
         var orderToUpdate = orderRepository.findById(cmd.orderNumber());
         if(orderToUpdate.isPresent()) {
             var order = orderToUpdate.get();
             order.setAwaitingValidationStatus();
             orderRepository.save(order);
         }
+
+        return new Voidy();
     }
 
 }

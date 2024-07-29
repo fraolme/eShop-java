@@ -1,9 +1,16 @@
 package io.github.fraolme.services.ordering.api.domain.base;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+
 import java.util.Objects;
 
+@MappedSuperclass
 public abstract class Entity {
-    private Integer requestedHashCode;
+    Integer requestedHashCode;
+
+    @Id @GeneratedValue
     private Long id;
 
     public Long getId() {
