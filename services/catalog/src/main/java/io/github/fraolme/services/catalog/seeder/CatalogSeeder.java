@@ -1,4 +1,4 @@
-package io.github.fraolme.services.catalog.seed;
+package io.github.fraolme.services.catalog.seeder;
 
 import io.github.fraolme.services.catalog.entities.CatalogBrand;
 import io.github.fraolme.services.catalog.entities.CatalogType;

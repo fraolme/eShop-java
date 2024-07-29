@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+@Table(name = "orders")
 @Inheritance
 @jakarta.persistence.Entity
 public class Order extends Entity implements IAggregateRoot {
@@ -22,9 +23,10 @@ public class Order extends Entity implements IAggregateRoot {
     private String description;
     private boolean isDraft;
 
-    @OneToMany
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
     private Integer paymentMethodId;
+
 
     public Order(){
         this.orderItems = new ArrayList<>();
@@ -100,7 +102,7 @@ public class Order extends Entity implements IAggregateRoot {
             obj.addUnits(units);
         } else {
             // add validated new order item
-            var orderItem = new OrderItem(productId, productName, unitPrice, discount, pictureUrl, units);
+            var orderItem = new OrderItem(this, productId, productName, unitPrice, discount, pictureUrl, units);
             this.orderItems.add(orderItem);
         }
     }

@@ -3,6 +3,8 @@ package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggr
 import io.github.fraolme.services.ordering.api.domain.base.Entity;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
 import jakarta.persistence.Inheritance;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import java.math.BigDecimal;
 
@@ -16,9 +18,13 @@ public class OrderItem extends Entity {
     private Integer units;
     private Long productId;
 
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
     public OrderItem() {}
 
-    public OrderItem(Long productId, String productName, BigDecimal unitPrice, BigDecimal discount,
+    public OrderItem(Order order, Long productId, String productName, BigDecimal unitPrice, BigDecimal discount,
                      String pictureUrl, Integer units) {
         if(units <= 0) {
             //TODO: throw new OrderingDomainException("Invalid number of units");
@@ -35,6 +41,7 @@ public class OrderItem extends Entity {
         this.discount = discount;
         this.units = units;
         this.pictureUrl = pictureUrl;
+        this.order = order;
     }
 
     public String getOrderItemProductName() {

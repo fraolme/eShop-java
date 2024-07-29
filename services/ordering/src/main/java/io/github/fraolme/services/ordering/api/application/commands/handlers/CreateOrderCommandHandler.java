@@ -5,7 +5,7 @@ import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.CreateOrderCommand;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Address;
 import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Order;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderRepository;
+import io.github.fraolme.services.ordering.api.domain.repositories.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

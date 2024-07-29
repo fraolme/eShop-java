@@ -3,7 +3,6 @@ package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggr
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
-
 import java.util.Objects;
 
 @Entity

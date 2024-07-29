@@ -3,7 +3,7 @@ package io.github.fraolme.services.ordering.api.application.commands.handlers;
 import an.awesome.pipelinr.Command;
 import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.SetPaidOrderStatusCommand;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderRepository;
+import io.github.fraolme.services.ordering.api.domain.repositories.OrderRepository;
 import org.springframework.stereotype.Component;
 
 @Component
