@@ -31,10 +31,10 @@ public class CatalogItem {
     /// </summary>
     private boolean onReorder;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private CatalogBrand catalogBrand;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private CatalogType catalogType;
 
     public CatalogItem() {}
