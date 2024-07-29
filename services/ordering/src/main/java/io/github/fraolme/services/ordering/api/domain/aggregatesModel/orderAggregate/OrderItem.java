@@ -2,6 +2,7 @@ package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggr
 
 import io.github.fraolme.services.ordering.api.domain.base.Entity;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
+import jakarta.persistence.Column;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -11,11 +12,16 @@ import java.math.BigDecimal;
 @Inheritance
 @jakarta.persistence.Entity
 public class OrderItem extends Entity {
+    @Column(nullable = false)
     private String productName;
     private String pictureUrl;
+    @Column(nullable = false)
     private BigDecimal unitPrice;
+    @Column(nullable = false)
     private BigDecimal discount;
+    @Column(nullable = false)
     private Integer units;
+    @Column(nullable = false)
     private Long productId;
 
     @ManyToOne

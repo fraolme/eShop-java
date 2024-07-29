@@ -4,7 +4,7 @@ import an.awesome.pipelinr.Command;
 import java.util.UUID;
 
 public record IdentifiedCommand<T extends Command<R>, R>(
-        Command<R> command,
+        T command,
         UUID id
 )implements Command<R> {}
 

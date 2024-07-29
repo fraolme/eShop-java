@@ -1,5 +1,7 @@
 package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate;
 
+import io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate.Buyer;
+import io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate.PaymentMethod;
 import io.github.fraolme.services.ordering.api.domain.base.Entity;
 import io.github.fraolme.services.ordering.api.domain.base.IAggregateRoot;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
@@ -12,21 +14,39 @@ import java.util.*;
 @Table(name = "orders")
 @Inheritance
 @jakarta.persistence.Entity
+@NamedEntityGraph(name = "order_entity_graph", attributeNodes = {
+        @NamedAttributeNode("orderStatus"),
+        @NamedAttributeNode("orderItems")})
 public class Order extends Entity implements IAggregateRoot {
 
+    @Column(nullable = false)
     private ZonedDateTime orderDate;
     @Embedded
     private Address address;
-    private Integer buyerId;
-    @ManyToOne
+    @ManyToOne(optional = false)
     private OrderStatus orderStatus;
     private String description;
     private boolean isDraft;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems;
-    private Integer paymentMethodId;
+    private final List<OrderItem> orderItems;
 
+    @Column(name = "payment_method_id")
+    private Long paymentMethodId;
+
+    // we will never access this, it is there just to create a foreign key relation
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_method_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private PaymentMethod paymentMethod;
+
+    @Column(name = "buyer_id")
+    private Long buyerId;
+
+
+    // we will never access this, it is there just to create a foreign key relation
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Buyer buyer;
 
     public Order(){
         this.orderItems = new ArrayList<>();
@@ -34,8 +54,8 @@ public class Order extends Entity implements IAggregateRoot {
     }
 
     public Order(String userId, String username, Address address, Integer cardTypeId, String cardNumber,
-                 String cardSecurityNumber, String cardHolderName, ZonedDateTime cardExpiration, Integer buyerId,
-                 Integer paymentMethodId){
+                 String cardSecurityNumber, String cardHolderName, ZonedDateTime cardExpiration, Long buyerId,
+                 Long paymentMethodId){
         this();
         this.buyerId = buyerId;
         this.paymentMethodId = paymentMethodId;
@@ -63,7 +83,7 @@ public class Order extends Entity implements IAggregateRoot {
         return address;
     }
 
-    public Integer getBuyerId() {
+    public Long getBuyerId() {
         return buyerId;
     }
 
@@ -84,7 +104,7 @@ public class Order extends Entity implements IAggregateRoot {
         return Collections.unmodifiableList(this.orderItems);
     }
 
-    public Integer getPaymentMethodId() {
+    public Long getPaymentMethodId() {
         return paymentMethodId;
     }
 
@@ -107,11 +127,11 @@ public class Order extends Entity implements IAggregateRoot {
         }
     }
 
-    public void setPaymentMethodId(Integer id) {
+    public void setPaymentMethodId(Long id) {
         this.paymentMethodId = id;
     }
 
-    public void setBuyerId(Integer id) {
+    public void setBuyerId(Long id) {
         this.buyerId = id;
     }
 

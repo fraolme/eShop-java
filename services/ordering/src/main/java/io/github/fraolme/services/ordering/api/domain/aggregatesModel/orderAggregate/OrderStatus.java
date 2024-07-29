@@ -1,5 +1,6 @@
 package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
@@ -10,6 +11,7 @@ public class OrderStatus {
     @Id
     private Long id;
 
+    @Column(nullable = false, length = 200)
     private String name;
 
     public OrderStatus() {}
