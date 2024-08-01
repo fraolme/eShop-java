@@ -1,4 +1,4 @@
-package io.github.fraolme.services.ordering.api.domain.base;
+package io.github.fraolme.services.ordering.domain.base;
 
 import java.util.Objects;
 import java.util.List;

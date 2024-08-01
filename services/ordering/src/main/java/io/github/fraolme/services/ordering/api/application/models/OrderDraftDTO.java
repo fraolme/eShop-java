@@ -1,6 +1,6 @@
 package io.github.fraolme.services.ordering.api.application.models;
 
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Order;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Order;
 
 import java.math.BigDecimal;
 import java.util.List;

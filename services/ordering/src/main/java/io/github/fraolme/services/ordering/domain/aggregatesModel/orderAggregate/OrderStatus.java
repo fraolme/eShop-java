@@ -1,4 +1,4 @@
-package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate;
+package io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

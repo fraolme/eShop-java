@@ -1,6 +1,6 @@
-package io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate;
+package io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate;
 
-import io.github.fraolme.services.ordering.api.domain.base.Entity;
+import io.github.fraolme.services.ordering.domain.base.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.JoinColumn;

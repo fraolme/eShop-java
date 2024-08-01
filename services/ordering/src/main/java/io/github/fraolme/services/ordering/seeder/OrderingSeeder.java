@@ -1,20 +1,19 @@
 package io.github.fraolme.services.ordering.seeder;
 
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate.Buyer;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate.CardType;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Address;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Order;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderStatus;
-import io.github.fraolme.services.ordering.api.domain.repositories.BuyerRepository;
-import io.github.fraolme.services.ordering.api.domain.repositories.CardTypeRepository;
-import io.github.fraolme.services.ordering.api.domain.repositories.OrderRepository;
-import io.github.fraolme.services.ordering.api.domain.repositories.OrderStatusRepository;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.Buyer;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.CardType;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Address;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Order;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.OrderStatus;
+import io.github.fraolme.services.ordering.infrastructure.repositories.BuyerRepository;
+import io.github.fraolme.services.ordering.infrastructure.repositories.CardTypeRepository;
+import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
+import io.github.fraolme.services.ordering.infrastructure.repositories.OrderStatusRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.smartcardio.Card;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

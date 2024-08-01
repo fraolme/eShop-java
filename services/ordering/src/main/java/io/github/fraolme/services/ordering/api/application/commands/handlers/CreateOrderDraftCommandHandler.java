@@ -4,7 +4,7 @@ import an.awesome.pipelinr.Command;
 import io.github.fraolme.services.ordering.api.application.commands.CreateOrderDraftCommand;
 import io.github.fraolme.services.ordering.api.application.models.BasketItem;
 import io.github.fraolme.services.ordering.api.application.models.OrderDraftDTO;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Order;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Order;
 import org.springframework.stereotype.Component;
 
 @Component

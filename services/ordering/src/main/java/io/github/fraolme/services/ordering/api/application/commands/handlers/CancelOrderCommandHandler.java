@@ -3,7 +3,7 @@ package io.github.fraolme.services.ordering.api.application.commands.handlers;
 import an.awesome.pipelinr.Command;
 import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.CancelOrderCommand;
-import io.github.fraolme.services.ordering.api.domain.repositories.OrderRepository;
+import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
 import org.springframework.stereotype.Component;
 
 @Component

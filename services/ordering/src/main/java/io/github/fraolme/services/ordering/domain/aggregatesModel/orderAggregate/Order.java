@@ -1,9 +1,9 @@
-package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate;
+package io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate;
 
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate.Buyer;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate.PaymentMethod;
-import io.github.fraolme.services.ordering.api.domain.base.Entity;
-import io.github.fraolme.services.ordering.api.domain.base.IAggregateRoot;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.Buyer;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.PaymentMethod;
+import io.github.fraolme.services.ordering.domain.base.Entity;
+import io.github.fraolme.services.ordering.domain.base.IAggregateRoot;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
 import jakarta.persistence.*;
 

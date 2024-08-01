@@ -4,11 +4,11 @@ import io.github.fraolme.services.ordering.api.application.models.EnumerationVie
 import io.github.fraolme.services.ordering.api.application.models.OrderItemViewModel;
 import io.github.fraolme.services.ordering.api.application.models.OrderSummaryViewModel;
 import io.github.fraolme.services.ordering.api.application.models.OrderViewModel;
-import io.github.fraolme.services.ordering.api.domain.repositories.BuyerRepository;
-import io.github.fraolme.services.ordering.api.domain.repositories.CardTypeRepository;
-import io.github.fraolme.services.ordering.api.domain.repositories.OrderRepository;
+import io.github.fraolme.services.ordering.infrastructure.repositories.BuyerRepository;
+import io.github.fraolme.services.ordering.infrastructure.repositories.CardTypeRepository;
+import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
 import org.springframework.stereotype.Component;
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.Order;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Order;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

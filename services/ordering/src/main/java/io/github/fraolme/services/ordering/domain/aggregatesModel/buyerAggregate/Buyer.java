@@ -1,7 +1,7 @@
-package io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate;
+package io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate;
 
-import io.github.fraolme.services.ordering.api.domain.base.Entity;
-import io.github.fraolme.services.ordering.api.domain.base.IAggregateRoot;
+import io.github.fraolme.services.ordering.domain.base.Entity;
+import io.github.fraolme.services.ordering.domain.base.IAggregateRoot;
 import jakarta.persistence.*;
 
 import java.time.ZonedDateTime;

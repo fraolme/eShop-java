@@ -1,6 +1,5 @@
-package io.github.fraolme.services.ordering.api.domain.aggregatesModel.buyerAggregate;
+package io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate;
 
-import io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate.OrderStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

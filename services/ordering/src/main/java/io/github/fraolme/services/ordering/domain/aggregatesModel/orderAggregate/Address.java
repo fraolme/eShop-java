@@ -1,6 +1,6 @@
-package io.github.fraolme.services.ordering.api.domain.aggregatesModel.orderAggregate;
+package io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate;
 
-import io.github.fraolme.services.ordering.api.domain.base.ValueObject;
+import io.github.fraolme.services.ordering.domain.base.ValueObject;
 import jakarta.persistence.Embeddable;
 
 import java.util.List;
