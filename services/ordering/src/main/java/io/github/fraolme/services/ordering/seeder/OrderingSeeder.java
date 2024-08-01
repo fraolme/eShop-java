@@ -5,6 +5,7 @@ import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate
 import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Address;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Order;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.OrderStatus;
+import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import io.github.fraolme.services.ordering.infrastructure.repositories.BuyerRepository;
 import io.github.fraolme.services.ordering.infrastructure.repositories.CardTypeRepository;
 import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
@@ -47,7 +48,7 @@ public class OrderingSeeder implements CommandLineRunner {
         log.info("{} Card Types", this.cardTypeRepository.count());
     }
 
-    private void seed() {
+    private void seed() throws OrderingDomainException {
         if(this.cardTypeRepository.count() == 0) {
             seedCardTypes();
         }
@@ -73,12 +74,14 @@ public class OrderingSeeder implements CommandLineRunner {
         this.orderStatusRepository.saveAllAndFlush(statuses);
     }
 
-    private void seedOrders() {
+    private void seedOrders() throws OrderingDomainException {
+        var buyer = buyerRepository.findByIdentityUuid(UUID.fromString("2127cbf4-e3b4-4fa5-b995-e10ed72001ca"))
+                .get();
         var address = new Address("21st Street", "Addis Ababa", "Addis Ababa", "Ethiopia", "0000");
-        var order = new Order("1", "john", address, 1, "VX234", "VVXM", "John Locke", ZonedDateTime.now().plusYears(1), null, null);
+        var order = new Order(buyer.getIdentityUuid(), "john", address, 1L, "VX234",
+                "VVXM", "John Locke", ZonedDateTime.now().plusYears(1), null, null);
         order.addOrderItem(20L, "Dell Laptop", BigDecimal.valueOf(2300), BigDecimal.valueOf(429), "", 1);
-        var buyer = buyerRepository.findByIdentityUuid(UUID.fromString("2127cbf4-e3b4-4fa5-b995-e10ed72001ca"));
-        order.setBuyerId(buyer.get().getId());
+        order.setBuyerId(buyer.getId());
         this.orderRepository.saveAndFlush(order);
     }
 

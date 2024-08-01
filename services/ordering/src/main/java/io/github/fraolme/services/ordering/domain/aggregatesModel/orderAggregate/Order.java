@@ -1,9 +1,12 @@
 package io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate;
 
 import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.Buyer;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.CardType;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.PaymentMethod;
 import io.github.fraolme.services.ordering.domain.base.Entity;
 import io.github.fraolme.services.ordering.domain.base.IAggregateRoot;
+import io.github.fraolme.services.ordering.domain.events.*;
+import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
 import jakarta.persistence.*;
 
@@ -53,19 +56,20 @@ public class Order extends Entity implements IAggregateRoot {
         this.isDraft = false;
     }
 
-    public Order(String userId, String username, Address address, Integer cardTypeId, String cardNumber,
+    public Order(UUID userId, String username, Address address, Long cardTypeId, String cardNumber,
                  String cardSecurityNumber, String cardHolderName, ZonedDateTime cardExpiration, Long buyerId,
                  Long paymentMethodId){
         this();
         this.buyerId = buyerId;
         this.paymentMethodId = paymentMethodId;
-        this.orderStatus = new OrderStatus(OrderStatus.submitted.getId());
+        this.orderStatus = OrderStatus.submitted;
         this.orderDate = ZonedDateTime.now();
         this.address = address;
 
         // add the OrderStartedDomainEvent to the domain events collection
         // to be raised/dispatched when commiting changes into the database
-        this.addOrderStartedDomainEvent(userId, username, cardTypeId, cardNumber, cardSecurityNumber,
+        var cardType = CardType.fromId(cardTypeId);
+        this.addOrderStartedDomainEvent(userId, username, cardType, cardNumber, cardSecurityNumber,
                 cardHolderName, cardExpiration);
     }
 
@@ -111,7 +115,7 @@ public class Order extends Entity implements IAggregateRoot {
     // DDD Pattern
     // this Order AggregateRoot's method addOrderItem should be the only way to add items to the Order
     public void addOrderItem(Long productId, String productName, BigDecimal unitPrice, BigDecimal discount,
-                             String pictureUrl, Integer units) {
+                             String pictureUrl, Integer units) throws OrderingDomainException {
         Optional<OrderItem> existingOrderForProduct = this.orderItems.stream().filter(o -> o.getProductId() == productId).findFirst();
         if(existingOrderForProduct.isPresent()) {
             var obj = existingOrderForProduct.get();
@@ -138,52 +142,52 @@ public class Order extends Entity implements IAggregateRoot {
     // status updating functionality
     public void setAwaitingValidationStatus(){
         if(Objects.equals(this.orderStatus.getId(), OrderStatus.submitted.getId())) {
-            //TODO: AddDomainEvent
-            this.orderStatus = new OrderStatus(OrderStatus.awaitingValidation.getId());
+            this.addDomainEvent(new OrderStatusChangedToAwaitingValidationDomainEvent(this.getId(), this.orderItems));
+            this.orderStatus = OrderStatus.awaitingValidation;
         }
     }
 
     public void setStockConfirmedStatus(){
         if(Objects.equals(this.orderStatus.getId(), OrderStatus.awaitingValidation.getId())) {
-            //TODO: AddDomainEvent
-            this.orderStatus = new OrderStatus(OrderStatus.stockConfirmed.getId());
+            this.addDomainEvent(new OrderStatusChangedToStockConfirmedDomainEvent(this.getId()));
+            this.orderStatus = OrderStatus.stockConfirmed;
             description = "All the items were confirmed with available stock.";
         }
     }
 
     public void setPaidStatus(){
         if(Objects.equals(this.orderStatus.getId(), OrderStatus.stockConfirmed.getId())) {
-            //TODO: AddDomainEvent
-            this.orderStatus = new OrderStatus(OrderStatus.paid.getId());
+            this.addDomainEvent(new OrderStatusChangedToPaidDomainEvent(this.getId(), this.orderItems));
+            this.orderStatus = OrderStatus.paid;
             description = "The payment was performed at a simulated " +
                     "\"American Bank checking bank account ending on XX35071\"";
         }
     }
 
-    public void setShippedStatus(){
+    public void setShippedStatus() throws OrderingDomainException {
         if(!Objects.equals(this.orderStatus.getId(), OrderStatus.paid.getId())) {
             this.statusChangeException(OrderStatus.shipped);
         }
 
-        this.orderStatus = new OrderStatus(OrderStatus.shipped.getId());
+        this.orderStatus = OrderStatus.shipped;
         description = "The order was shipped";
-        //TODO: AddDomainEvent
+        this.addDomainEvent(new OrderStatusChangedToPaidDomainEvent(this.getId(), this.orderItems));
     }
 
-    public void setCancelledStatus(){
+    public void setCancelledStatus() throws OrderingDomainException {
         if(Objects.equals(this.orderStatus.getId(), OrderStatus.paid.getId()) ||
             Objects.equals(this.orderStatus.getId(), OrderStatus.shipped.getId())) {
             this.statusChangeException(OrderStatus.cancelled);
         }
 
-        this.orderStatus = new OrderStatus(OrderStatus.cancelled.getId());
+        this.orderStatus = OrderStatus.cancelled;
         this.description = "The order was cancelled";
-        //TODO: AddDomainEvent
+        this.addDomainEvent(new OrderCancelledDomainEvent(this));
     }
 
     public void setCancelledStatusWhenStockIsRejected(List<Long> orderStockRejectedItems) {
         if(Objects.equals(this.orderStatus.getId(), OrderStatus.awaitingValidation.getId())) {
-            this.orderStatus = new OrderStatus(OrderStatus.cancelled.getId());
+            this.orderStatus = OrderStatus.cancelled;
 
             var itemsStockRejectedProductNames = this.orderItems.stream()
                     .filter(c -> orderStockRejectedItems.contains(c.getProductId()))
@@ -195,15 +199,15 @@ public class Order extends Entity implements IAggregateRoot {
         }
     }
 
-    private void addOrderStartedDomainEvent(String userId, String username, Integer cardTypeId, String cardNumber,
+    private void addOrderStartedDomainEvent(UUID userId, String username, CardType cardType, String cardNumber,
                                   String cardSecurityNumber, String cardHolderNumber, ZonedDateTime cardExpiration) {
-        //TODO: add OrderStartedDomainEvent
+        this.addDomainEvent(new OrderStartedDomainEvent(this, userId, username, cardType, cardNumber,
+                cardSecurityNumber, cardHolderNumber, cardExpiration));
     }
 
-    private void statusChangeException(OrderStatus orderStatusToChange) {
-        //TODO: throw new OrderingDomainException(String.format(
-        // "Is not possible to change the order status from %s to %s",
-        // this.orderStatus.getName(), orderStatusToChange.getName());
+    private void statusChangeException(OrderStatus orderStatusToChange) throws OrderingDomainException {
+        throw new OrderingDomainException(String.format("Is not possible to change the order status from %s to %s",
+                this.orderStatus.getName(), orderStatusToChange.getName()));
     }
 
     public BigDecimal getTotal() {

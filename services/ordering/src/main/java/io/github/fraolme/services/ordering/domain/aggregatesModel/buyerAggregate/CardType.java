@@ -1,59 +1,16 @@
 package io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import io.github.fraolme.services.ordering.domain.base.Enumeration;
+import jakarta.persistence.*;
 
-import java.util.Objects;
-
+@Inheritance
 @Entity
-public class CardType {
-
-    @Id
-    private Long id;
-
-    @Column(length = 200, nullable = false)
-    private String name;
-
+public class CardType extends Enumeration {
 
     public CardType() {}
 
-    public CardType(String name) {
-        this.name = name;
-    }
-
-    public CardType(Long id) {
-        this.id = id;
-    }
-
     private CardType(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CardType that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+        super(id, name);
     }
 
     @Transient
@@ -64,4 +21,8 @@ public class CardType {
 
     @Transient
     public static CardType masterCard = new CardType(3L, "MasterCard");
+
+    public static CardType fromId(Long id) {
+        return fromId(id, CardType.class);
+    }
 }

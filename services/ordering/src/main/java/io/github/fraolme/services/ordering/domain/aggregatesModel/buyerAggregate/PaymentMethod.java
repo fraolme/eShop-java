@@ -1,6 +1,7 @@
 package io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate;
 
 import io.github.fraolme.services.ordering.domain.base.Entity;
+import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.JoinColumn;
@@ -30,18 +31,18 @@ public class PaymentMethod extends Entity {
     public PaymentMethod() {}
 
     public PaymentMethod(CardType cardType, String alias, String cardNumber, String securityNumber,
-                         String cardHolderName, ZonedDateTime expiration) {
+                         String cardHolderName, ZonedDateTime expiration) throws OrderingDomainException {
         if(cardNumber == null || cardNumber.isEmpty()) {
-            //TODO: throw new OrderingDomainException
+            throw new OrderingDomainException("CardNumber");
         }
         if(securityNumber == null || securityNumber.isEmpty()) {
-            //TODO: throw new OrderingDomainException
+            throw new OrderingDomainException("SecurityNumber");
         }
         if(cardHolderName == null || cardHolderName.isEmpty()) {
-            //TODO: throw new OrderingDomainException
+            throw new OrderingDomainException("CardHolderName");
         }
         if(expiration.isBefore(ZonedDateTime.now())) {
-            //TODO: throw new OrderingDomainException
+            throw new OrderingDomainException("Expiration");
         }
         this.alias = alias;
         this.expiration = expiration;

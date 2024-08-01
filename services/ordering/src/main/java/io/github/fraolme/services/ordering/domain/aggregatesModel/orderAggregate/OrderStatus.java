@@ -1,56 +1,22 @@
 package io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.CardType;
+import io.github.fraolme.services.ordering.domain.base.Enumeration;
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Inheritance
 @Entity
-public class OrderStatus {
-    @Id
-    private Long id;
-
-    @Column(nullable = false, length = 200)
-    private String name;
-
+public class OrderStatus extends Enumeration {
     public OrderStatus() {}
 
-    public OrderStatus(String name) {
-        this.name = name;
-    }
-
-    public OrderStatus(Long id) {
-        this.id = id;
-    }
-
     private OrderStatus(Long id, String name) {
-        this.id = id;
-        this.name = name;
+        super(id, name);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrderStatus that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    public static OrderStatus fromId(Long id) {
+        return fromId(id, OrderStatus.class);
     }
 
     @Transient

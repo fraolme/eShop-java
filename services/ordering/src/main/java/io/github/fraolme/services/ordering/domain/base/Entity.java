@@ -1,9 +1,14 @@
 package io.github.fraolme.services.ordering.domain.base;
 
+import an.awesome.pipelinr.Notification;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -21,15 +26,33 @@ public abstract class Entity {
         this.id = id;
     }
 
-    //TODO: Domain Events
+    @Transient
+    List<Notification> domainEvents;
 
-    //TODO: Add Domain Event
+    public List<Notification> getDomainEvents() {
+        return Collections.unmodifiableList(this.domainEvents);
+    }
 
-    //TODO: Remove Domain Event
+    public void addDomainEvent(Notification event) {
+        if(this.domainEvents == null) {
+            this.domainEvents = new ArrayList<>();
+        }
+        this.domainEvents.add(event);
+    }
 
-    //TODO: Clear Domain Event
+    public  void RemoveDomainEvent(Notification event) {
+        if(this.domainEvents != null) {
+            this.domainEvents.remove(event);
+        }
+    }
 
-    public boolean isTransient() {
+    public void ClearDomainEvents(Notification event) {
+        if(this.domainEvents != null) {
+            this.domainEvents.clear();
+        }
+    }
+
+    private boolean isTransient() {
         return this.id == 0;
     }
 

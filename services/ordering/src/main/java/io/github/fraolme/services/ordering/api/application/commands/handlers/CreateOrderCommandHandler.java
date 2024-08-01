@@ -5,6 +5,7 @@ import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.CreateOrderCommand;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Address;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Order;
+import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,12 @@ public class CreateOrderCommandHandler implements Command.Handler<CreateOrderCom
                 cmd.cardSecurityNumber(), cmd.cardHolderName(), cmd.cardExpiration(), null, null);
 
         for(var item : cmd.orderItems()) {
-            order.addOrderItem(item.productId(), item.productName(), item.unitPrice(), item.discount(),
-                    item.pictureUrl(), item.units());
+            try {
+                order.addOrderItem(item.productId(), item.productName(), item.unitPrice(), item.discount(),
+                        item.pictureUrl(), item.units());
+            } catch (OrderingDomainException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         //TODO: use structured logging with Serliog or others to log all properties of order

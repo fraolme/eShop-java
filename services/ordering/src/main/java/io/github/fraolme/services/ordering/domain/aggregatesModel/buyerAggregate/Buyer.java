@@ -2,6 +2,8 @@ package io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregat
 
 import io.github.fraolme.services.ordering.domain.base.Entity;
 import io.github.fraolme.services.ordering.domain.base.IAggregateRoot;
+import io.github.fraolme.services.ordering.domain.events.BuyerAndPaymentMethodVerifiedDomainEvent;
+import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import jakarta.persistence.*;
 
 import java.time.ZonedDateTime;
@@ -53,17 +55,18 @@ public class Buyer extends Entity implements IAggregateRoot {
 
     public PaymentMethod verifyOrAddPaymentMethod(CardType cardType, String alias, String cardNumber,
                                                   String securityNumber, String cardHolderName, ZonedDateTime expiration,
-                                                  Long orderId) {
+                                                  Long orderId) throws OrderingDomainException {
         var existingPayment = paymentMethods.stream().filter(p -> p.isEqualTo(cardType, cardNumber, expiration))
                 .findFirst();
         if(existingPayment.isPresent()) {
-            //TODO: AddDomainEvent()
+            this.addDomainEvent(new BuyerAndPaymentMethodVerifiedDomainEvent(this, existingPayment.get(), orderId));
             return existingPayment.get();
         }
 
         var payment = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration);
         paymentMethods.add(payment);
-        //TODO: AddDomainEvent()
+
+        this.addDomainEvent(new BuyerAndPaymentMethodVerifiedDomainEvent(this, payment, orderId));
 
         return payment;
     }

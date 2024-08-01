@@ -3,6 +3,7 @@ package io.github.fraolme.services.ordering.api.application.commands.handlers;
 import an.awesome.pipelinr.Command;
 import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.ShipOrderCommand;
+import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,11 @@ public class ShipOrderCommandHandler implements Command.Handler<ShipOrderCommand
         var orderToUpdate = orderRepository.findById(cmd.orderNumber());
         if(orderToUpdate.isPresent()) {
             var order = orderToUpdate.get();
-            order.setShippedStatus();
+            try {
+                order.setShippedStatus();
+            } catch (OrderingDomainException e) {
+                throw new RuntimeException(e);
+            }
             orderRepository.save(order);
         }
 

@@ -36,7 +36,7 @@ public class IdentifiedCommandHandler<T extends Command<R>, R> implements Comman
 
             if (command instanceof CreateOrderCommand createOrderCommand) {
                 idProperty = "userId";
-                commandId = createOrderCommand.userId();
+                commandId = createOrderCommand.userId().toString();
             } else if (command instanceof CancelOrderCommand cancelOrderCommand) {
                 idProperty = "orderNumber";
                 commandId = cancelOrderCommand.orderNumber().toString();

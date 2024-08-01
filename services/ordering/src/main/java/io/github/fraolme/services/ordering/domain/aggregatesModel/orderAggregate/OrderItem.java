@@ -1,6 +1,7 @@
 package io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate;
 
 import io.github.fraolme.services.ordering.domain.base.Entity;
+import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import io.github.fraolme.services.ordering.utils.BigDecimalUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Inheritance;
@@ -31,14 +32,14 @@ public class OrderItem extends Entity {
     public OrderItem() {}
 
     public OrderItem(Order order, Long productId, String productName, BigDecimal unitPrice, BigDecimal discount,
-                     String pictureUrl, Integer units) {
+                     String pictureUrl, Integer units) throws OrderingDomainException {
         if(units <= 0) {
-            //TODO: throw new OrderingDomainException("Invalid number of units");
+            throw new OrderingDomainException("Invalid number of units");
         }
 
          // unitPrice * units < discount
         if(BigDecimalUtils.lessThan(unitPrice.multiply(BigDecimal.valueOf(units)), discount)) {
-            //TODO: throw new OrderingDomainException("The total of order item is lower than applied discount");
+            throw new OrderingDomainException("The total of order item is lower than applied discount");
         }
 
         this.productId = productId;
@@ -74,16 +75,16 @@ public class OrderItem extends Entity {
         return productId;
     }
 
-    public void setNewDiscount(BigDecimal discount) {
+    public void setNewDiscount(BigDecimal discount) throws OrderingDomainException {
         if(BigDecimalUtils.lessThan(discount, BigDecimal.valueOf(0))) {
-            //TODO: throw new OrderingDomainException("Discount is not valid");
+            throw new OrderingDomainException("Discount is not valid");
         }
         this.discount = discount;
     }
 
-    public void addUnits(Integer units) {
+    public void addUnits(Integer units) throws OrderingDomainException {
         if(units < 0) {
-            //TODO: throw new OrderingDomainException("Invalid units");
+            throw new OrderingDomainException("Invalid units");
         }
         this.units += units;
     }
