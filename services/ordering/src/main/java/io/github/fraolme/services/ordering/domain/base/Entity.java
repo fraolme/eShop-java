@@ -40,13 +40,13 @@ public abstract class Entity {
         this.domainEvents.add(event);
     }
 
-    public  void RemoveDomainEvent(Notification event) {
+    public  void removeDomainEvent(Notification event) {
         if(this.domainEvents != null) {
             this.domainEvents.remove(event);
         }
     }
 
-    public void ClearDomainEvents(Notification event) {
+    public void clearDomainEvents(Notification event) {
         if(this.domainEvents != null) {
             this.domainEvents.clear();
         }
