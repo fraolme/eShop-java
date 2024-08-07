@@ -15,6 +15,9 @@ import io.github.fraolme.services.ordering.utils.UuidUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.UUID;
 
+@PreAuthorize("isAuthenticated()")
 @Validated
 @RestController
 @RequestMapping("order")
@@ -86,9 +90,9 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderSummaryViewModel> getOrders() {
-        //TODO: get user identity from token
-        var userId = UUID.fromString("2127cbf4-e3b4-4fa5-b995-e10ed72001ca");
+    public List<OrderSummaryViewModel> getOrders(@AuthenticationPrincipal Jwt jwt) {
+        String userIdStr = jwt.getClaim("sub");
+        var userId = UUID.fromString(userIdStr);
         return orderQueries.getOrdersByUser(userId);
     }
 
