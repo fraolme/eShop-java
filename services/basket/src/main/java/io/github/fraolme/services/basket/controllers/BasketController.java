@@ -6,11 +6,13 @@ import io.github.fraolme.services.basket.repositories.RedisBasketRepository;
 import io.github.fraolme.services.basket.utils.UuidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
+@PreAuthorize("isAuthenticated()")
 @RequestMapping(value = "basket")
 @RestController
 public class BasketController {

@@ -13,11 +13,25 @@ public class AppProperties {
     @Value("${redis.port}")
     private int redisPort;
 
+    @Value("${keycloak.realm}")
+    private String realm;
+
+    @Value("${keycloak.auth-server-url}")
+    private String authServerUrl;
+
     public int getRedisPort() {
         return redisPort;
     }
 
     public String getRedisServer() {
         return redisServer;
+    }
+
+    public String getRealm() {
+        return this.realm;
+    }
+
+    public  String getAuthServerUrl() {
+        return this.authServerUrl;
     }
 }
