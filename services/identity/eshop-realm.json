@@ -1,0 +1,49 @@
+{
+  "realm": "eshop",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "basketswaggerui",
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:8082/swagger-ui/oauth2-redirect.html"
+      ],
+      "publicClient": false,
+      "secret": "secretValueForBasketswaggerui",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": true,
+      "clientAuthenticatorType": "client-secret"
+    },
+    {
+      "clientId": "orderingswaggerui",
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:8083/swagger-ui/oauth2-redirect.html"
+      ],
+      "publicClient": false,
+      "secret": "secretValueForOrderingswaggerui",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": true,
+      "clientAuthenticatorType": "client-secret"
+    }
+  ],
+  "users": [
+    {
+      "username": "alice",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Alice",
+      "lastName": "Smith",
+      "email": "AliceSmith@email.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password",
+          "temporary": false
+        }
+      ]
+    }
+  ]
+}
