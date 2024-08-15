@@ -17,7 +17,7 @@ public class RedisConfig {
     AppProperties appProperties;
 
     @Bean
-    public RedisConnectionFactory connectionFactory() {
+    public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(new RedisStandaloneConfiguration(appProperties.getRedisServer(),
                 appProperties.getRedisPort()));
     }

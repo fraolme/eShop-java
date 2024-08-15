@@ -3,6 +3,8 @@ package io.github.fraolme.services.catalog.controllers;
 import io.github.fraolme.services.catalog.entities.CatalogBrand;
 import io.github.fraolme.services.catalog.entities.CatalogItem;
 import io.github.fraolme.services.catalog.entities.CatalogType;
+import io.github.fraolme.services.catalog.integration_events.CatalogIntegrationEventService;
+import io.github.fraolme.services.catalog.integration_events.events.ProductPriceChangedIntegrationEvent;
 import io.github.fraolme.services.catalog.repositories.CatalogBrandRepository;
 import io.github.fraolme.services.catalog.repositories.CatalogItemRepository;
 import io.github.fraolme.services.catalog.repositories.CatalogTypeRepository;
@@ -25,12 +27,15 @@ public class CatalogController {
     private final CatalogItemRepository catalogItemRepository;
     private final CatalogTypeRepository catalogTypeRepository;
     private final CatalogBrandRepository catalogBrandRepository;
+    private final CatalogIntegrationEventService catalogIntegrationEventService;
 
     public CatalogController(CatalogItemRepository catalogItemRepository, CatalogTypeRepository catalogTypeRepository,
-                             CatalogBrandRepository catalogBrandRepository) {
+                             CatalogBrandRepository catalogBrandRepository,
+                             CatalogIntegrationEventService catalogIntegrationEventService) {
         this.catalogItemRepository = catalogItemRepository;
         this.catalogTypeRepository = catalogTypeRepository;
         this.catalogBrandRepository = catalogBrandRepository;
+        this.catalogIntegrationEventService = catalogIntegrationEventService;
     }
 
     @GetMapping("items")
@@ -89,7 +94,7 @@ public class CatalogController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var oldPrice = existingItem.getPrice();
-        var raiseProductPriceChangedEvent = !Objects.equals(oldPrice, updatedItem.getPrice());
+        var raiseProductPriceChangedEvent = !oldPrice.equals(updatedItem.getPrice());
 
         // update current product
         existingItem.setName(updatedItem.getName());
@@ -104,10 +109,14 @@ public class CatalogController {
         this.catalogItemRepository.save(existingItem);
 
         if(raiseProductPriceChangedEvent) {
-            //TODO: send ProductPriceChangedIntegrationEvent
+            System.out.println("Here--------------------");
             // Create Integration Event to be published through Event bus
+            var priceChangedEvent = new ProductPriceChangedIntegrationEvent(existingItem.getId(), updatedItem.getPrice(),
+                    oldPrice);
             // Achieving atomicity between original Catalog database operation and the Integration Event Log
+            catalogIntegrationEventService.saveEvent(priceChangedEvent);
             // Publish through the Event bus and mark the saved event as published
+            catalogIntegrationEventService.publishThroughEventBus(priceChangedEvent);
         }
 
         return existingItem;
