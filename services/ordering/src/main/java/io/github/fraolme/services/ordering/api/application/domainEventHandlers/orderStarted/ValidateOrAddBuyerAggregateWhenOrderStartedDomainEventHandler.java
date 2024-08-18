@@ -1,6 +1,8 @@
 package io.github.fraolme.services.ordering.api.application.domainEventHandlers.orderStarted;
 
 import an.awesome.pipelinr.Notification;
+import io.github.fraolme.services.ordering.api.application.integrationevents.OrderingIntegrationEventService;
+import io.github.fraolme.services.ordering.api.application.integrationevents.events.OrderStatusChangedToSubmittedIntegrationEvent;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.Buyer;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate.CardType;
 import io.github.fraolme.services.ordering.domain.events.OrderStartedDomainEvent;
@@ -16,9 +18,12 @@ public class ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler
 
     private final Logger log = LoggerFactory.getLogger(ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler.class);
     private final BuyerRepository buyerRepository;
+    private final OrderingIntegrationEventService orderingIntegrationEventService;
 
-    public ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler(BuyerRepository buyerRepository) {
+    public ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler(BuyerRepository buyerRepository,
+                                                                         OrderingIntegrationEventService orderingIntegrationEventService) {
         this.buyerRepository = buyerRepository;
+        this.orderingIntegrationEventService = orderingIntegrationEventService;
     }
 
     @Override
@@ -41,7 +46,9 @@ public class ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler
 
         buyerRepository.saveAndFlush(buyer);
 
-        //TODO: send OrderStatusChangedToSubmittedIntegrationEvent
+        var integrationEvent = new OrderStatusChangedToSubmittedIntegrationEvent(event.order().getId(),
+                event.order().getOrderStatus().getName(), buyer.getName());
+        orderingIntegrationEventService.addAndSaveEvent(integrationEvent);
 
         log.trace("Buyer {} and related payment method were validated or updated for orderId: {}",
                 buyer.getId(), event.order().getId());

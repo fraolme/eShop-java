@@ -1,8 +1,7 @@
 package io.github.fraolme.services.catalog.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.github.fraolme.services.catalog.exceptions.CatalogDomainException;
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
 //TODO: add equals and hashcode
@@ -26,9 +25,7 @@ public class CatalogItem {
     private int restockThreshold;
     // Maximum number of units that can be in-stock at any time (due to physical/logistical constraints in warehouses)
     private int maxStockThreshold;
-    /// <summary>
     /// True if item is on reorder
-    /// </summary>
     private boolean onReorder;
 
     @ManyToOne(optional = false)
@@ -143,5 +140,32 @@ public class CatalogItem {
 
     public void setCatalogType(CatalogType catalogType) {
         this.catalogType = catalogType;
+    }
+
+    public int removeStock(int quantityDesired) throws CatalogDomainException {
+        if(this.availableStock == 0) {
+            throw new CatalogDomainException(String.format("Empty Stock, product item %s is sold out", this.name));
+        }
+
+        if(quantityDesired <= 0) {
+            throw new CatalogDomainException("Item units desired should be greater than zero");
+        }
+
+        int removed = Math.min(quantityDesired, this.availableStock);
+        this.availableStock -= removed;
+
+        return removed;
+    }
+
+    public int addStock(int quantity) {
+        int original = this.availableStock;
+
+        if(this.availableStock + quantity > this.maxStockThreshold) {
+            this.availableStock += (this.maxStockThreshold - this.availableStock);
+        } else {
+            this.availableStock += quantity;
+        }
+        this.onReorder = false;
+        return this.availableStock - original;
     }
 }

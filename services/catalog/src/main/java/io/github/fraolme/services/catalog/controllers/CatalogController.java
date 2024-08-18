@@ -3,8 +3,8 @@ package io.github.fraolme.services.catalog.controllers;
 import io.github.fraolme.services.catalog.entities.CatalogBrand;
 import io.github.fraolme.services.catalog.entities.CatalogItem;
 import io.github.fraolme.services.catalog.entities.CatalogType;
-import io.github.fraolme.services.catalog.integration_events.CatalogIntegrationEventService;
-import io.github.fraolme.services.catalog.integration_events.events.ProductPriceChangedIntegrationEvent;
+import io.github.fraolme.services.catalog.integrationevents.CatalogIntegrationEventService;
+import io.github.fraolme.services.catalog.integrationevents.events.ProductPriceChangedIntegrationEvent;
 import io.github.fraolme.services.catalog.repositories.CatalogBrandRepository;
 import io.github.fraolme.services.catalog.repositories.CatalogItemRepository;
 import io.github.fraolme.services.catalog.repositories.CatalogTypeRepository;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Objects;
 
 @Validated
 @RequestMapping("catalog")
@@ -109,7 +108,6 @@ public class CatalogController {
         this.catalogItemRepository.save(existingItem);
 
         if(raiseProductPriceChangedEvent) {
-            System.out.println("Here--------------------");
             // Create Integration Event to be published through Event bus
             var priceChangedEvent = new ProductPriceChangedIntegrationEvent(existingItem.getId(), updatedItem.getPrice(),
                     oldPrice);

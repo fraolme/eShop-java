@@ -3,6 +3,8 @@ package io.github.fraolme.services.ordering.api.application.commands.handlers;
 import an.awesome.pipelinr.Command;
 import an.awesome.pipelinr.Voidy;
 import io.github.fraolme.services.ordering.api.application.commands.CreateOrderCommand;
+import io.github.fraolme.services.ordering.api.application.integrationevents.OrderingIntegrationEventService;
+import io.github.fraolme.services.ordering.api.application.integrationevents.events.OrderStartedIntegrationEvent;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Address;
 import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate.Order;
 import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
@@ -13,16 +15,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CreateOrderCommandHandler implements Command.Handler<CreateOrderCommand, Voidy>{
-    private final OrderRepository orderRepository;
-    private static final Logger log = LoggerFactory.getLogger(CreateOrderCommandHandler.class);
 
-    public CreateOrderCommandHandler(OrderRepository orderRepository) {
+    private static final Logger log = LoggerFactory.getLogger(CreateOrderCommandHandler.class);
+    private final OrderRepository orderRepository;
+    private final OrderingIntegrationEventService orderingIntegrationEventService;
+
+    public CreateOrderCommandHandler(OrderRepository orderRepository, OrderingIntegrationEventService orderingIntegrationEventService) {
         this.orderRepository = orderRepository;
+        this.orderingIntegrationEventService = orderingIntegrationEventService;
     }
 
     @Override
     public Voidy handle(CreateOrderCommand cmd) {
-        //TODO: add integration event to clean the basket
+        // add integration event to clean the basket
+        var orderStartedIntegrationEvent = new OrderStartedIntegrationEvent(cmd.userId());
+        this.orderingIntegrationEventService.addAndSaveEvent(orderStartedIntegrationEvent);
 
         var address = new Address(cmd.street(), cmd.city(), cmd.state(), cmd.country(), cmd.zipCode());
         var order = new Order(cmd.userId(), cmd.username(), address, cmd.cardTypeId(), cmd.cardNumber(),

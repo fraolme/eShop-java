@@ -1,4 +1,4 @@
-package io.github.fraolme.services.basket.integration_events.events;
+package io.github.fraolme.services.basket.integrationevents.events;
 
 import io.github.fraolme.event_bus_rabbitmq.events.IntegrationEvent;
 

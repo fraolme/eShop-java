@@ -1,8 +1,7 @@
-package io.github.fraolme.services.basket.integration_events.handlers;
+package io.github.fraolme.services.basket.integrationevents.handlers;
 
 import io.github.fraolme.event_bus_rabbitmq.events.IIntegrationEventHandler;
-import io.github.fraolme.event_bus_rabbitmq.events.IntegrationEvent;
-import io.github.fraolme.services.basket.integration_events.events.ProductPriceChangedIntegrationEvent;
+import io.github.fraolme.services.basket.integrationevents.events.ProductPriceChangedIntegrationEvent;
 import io.github.fraolme.services.basket.models.CustomerBasket;
 import io.github.fraolme.services.basket.repositories.RedisBasketRepository;
 import org.slf4j.Logger;
