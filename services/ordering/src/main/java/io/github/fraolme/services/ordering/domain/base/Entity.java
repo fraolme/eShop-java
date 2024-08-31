@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
+import org.springframework.data.domain.AfterDomainEventPublication;
+import org.springframework.data.domain.DomainEvents;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,31 +31,28 @@ public abstract class Entity {
     @Transient
     List<Notification> domainEvents;
 
+    public Entity() {
+        this.domainEvents = new ArrayList<>();
+    }
+
+    @DomainEvents
     public List<Notification> getDomainEvents() {
-        return Collections.unmodifiableList(this.domainEvents);
+        var list = new ArrayList<>(this.domainEvents);
+        // TODO: find a better way to handle the infinite loop created by domain events
+        this.domainEvents.clear();
+        return list;
     }
 
     public void addDomainEvent(Notification event) {
-        if(this.domainEvents == null) {
-            this.domainEvents = new ArrayList<>();
-        }
         this.domainEvents.add(event);
     }
 
     public  void removeDomainEvent(Notification event) {
-        if(this.domainEvents != null) {
-            this.domainEvents.remove(event);
-        }
-    }
-
-    public void clearDomainEvents(Notification event) {
-        if(this.domainEvents != null) {
-            this.domainEvents.clear();
-        }
+        this.domainEvents.remove(event);
     }
 
     private boolean isTransient() {
-        return this.id == 0;
+        return this.id == null;
     }
 
     @Override

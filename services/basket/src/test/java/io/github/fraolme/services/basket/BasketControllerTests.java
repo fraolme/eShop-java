@@ -85,7 +85,7 @@ public class BasketControllerTests {
                             .writeValueAsString(new BasketCheckout("Addis Ababa", "Elm Street",
                 "Addis Ababa", "Ethiopia", "0000", "999777", "Amaranta",
                 ZonedDateTime.of(2026, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault()),
-                "9875", 1, "2", UUID.randomUUID()));
+                "9875", 1L, "2", UUID.randomUUID()));
 
         // act
         var actionResult = this.mockMvc.perform(

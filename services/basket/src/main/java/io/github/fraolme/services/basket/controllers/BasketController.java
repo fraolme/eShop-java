@@ -51,6 +51,7 @@ public class BasketController {
                          @AuthenticationPrincipal Jwt jwt) {
 
         String customerId = jwt.getClaim("sub");
+        //TODO: do something about this later
         UUID requestId = UuidUtils.tryParseUUID(requestIdFromHeader).orElse(basketCheckout.requestId());
 
         var basket = this.redisBasketRepository.findById(customerId)

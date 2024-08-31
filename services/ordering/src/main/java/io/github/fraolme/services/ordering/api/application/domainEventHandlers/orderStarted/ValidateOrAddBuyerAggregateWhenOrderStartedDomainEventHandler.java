@@ -10,9 +10,10 @@ import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainExcep
 import io.github.fraolme.services.ordering.infrastructure.repositories.BuyerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.stereotype.Component;
 import java.time.ZonedDateTime;
 
+@Component
 public class ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler
     implements Notification.Handler<OrderStartedDomainEvent> {
 

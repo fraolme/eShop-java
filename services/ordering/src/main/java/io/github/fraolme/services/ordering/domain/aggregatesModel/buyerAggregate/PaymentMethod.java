@@ -2,10 +2,8 @@ package io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregat
 
 import io.github.fraolme.services.ordering.domain.base.Entity;
 import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
-import jakarta.persistence.Column;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 import java.time.ZonedDateTime;
 
 @Inheritance
@@ -24,14 +22,15 @@ public class PaymentMethod extends Entity {
     @ManyToOne(optional = false)
     private CardType cardType;
 
-    @ManyToOne
+    // we will never access this, it is there just to create a foreign key relation
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id", nullable = false)
     private Buyer buyer;
 
     public PaymentMethod() {}
 
     public PaymentMethod(CardType cardType, String alias, String cardNumber, String securityNumber,
-                         String cardHolderName, ZonedDateTime expiration) throws OrderingDomainException {
+                         String cardHolderName, ZonedDateTime expiration, Buyer buyer) throws OrderingDomainException {
         if(cardNumber == null || cardNumber.isEmpty()) {
             throw new OrderingDomainException("CardNumber");
         }
@@ -50,6 +49,7 @@ public class PaymentMethod extends Entity {
         this.cardNumber = cardNumber;
         this.securityNumber = securityNumber;
         this.cardHolderName = cardHolderName;
+        this.buyer = buyer;
     }
 
     public boolean isEqualTo(CardType cardType, String cardNumber, ZonedDateTime expiration) {

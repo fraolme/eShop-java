@@ -8,21 +8,23 @@ import java.util.UUID;
 
 public class UserCheckoutAcceptedIntegrationEvent extends IntegrationEvent {
 
-    private final UUID userId;
-    private final String username;
-    private final String city;
-    private final String street;
-    private final String state;
-    private final String country;
-    private final String zipCode;
-    private final String cardNumber;
-    private final String cardHolderName;
-    private final ZonedDateTime cardExpiration;
-    private final String cardSecurityNumber;
-    private final Long cardTypeId;
-    private final String buyer;
-    private final UUID requestId;
-    private final CustomerBasket basket;
+    private UUID userId;
+    private String username;
+    private String city;
+    private String street;
+    private String state;
+    private String country;
+    private String zipCode;
+    private String cardNumber;
+    private String cardHolderName;
+    private ZonedDateTime cardExpiration;
+    private String cardSecurityNumber;
+    private Long cardTypeId;
+    private String buyer;
+    private UUID requestId;
+    private CustomerBasket basket;
+
+    public UserCheckoutAcceptedIntegrationEvent() {}
 
     public UserCheckoutAcceptedIntegrationEvent(UUID userId, String username, String city, String street,
                                                 String state, String country, String zipCode, String cardNumber,

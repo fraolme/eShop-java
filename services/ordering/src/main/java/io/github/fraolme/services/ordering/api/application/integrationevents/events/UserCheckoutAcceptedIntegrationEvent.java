@@ -23,6 +23,9 @@ public class UserCheckoutAcceptedIntegrationEvent extends IntegrationEvent {
     private UUID requestId;
     private CustomerBasket basket;
 
+    public UserCheckoutAcceptedIntegrationEvent() {
+    }
+
     public UserCheckoutAcceptedIntegrationEvent(UUID userId, String username, String city, String street,
                                                 String state, String country, String zipCode, String cardNumber,
                                                 String cardHolderName, ZonedDateTime cardExpiration, String cardSecurityNumber,

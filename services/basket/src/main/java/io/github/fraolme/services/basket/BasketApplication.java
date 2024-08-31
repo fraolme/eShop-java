@@ -1,7 +1,9 @@
 package io.github.fraolme.services.basket;
 
 import io.github.fraolme.event_bus_rabbitmq.EventBusRabbitMQ;
+import io.github.fraolme.services.basket.integrationevents.events.OrderStartedIntegrationEvent;
 import io.github.fraolme.services.basket.integrationevents.events.ProductPriceChangedIntegrationEvent;
+import io.github.fraolme.services.basket.integrationevents.handlers.OrderStartedIntegrationEventHandler;
 import io.github.fraolme.services.basket.integrationevents.handlers.ProductPriceChangedIntegrationEventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,7 @@ public class BasketApplication {
 	public CommandLineRunner integrationEventSubscribe(EventBusRabbitMQ eventBus) {
 		return args -> {
 			eventBus.subscribe(ProductPriceChangedIntegrationEvent.class, ProductPriceChangedIntegrationEventHandler.class);
+			eventBus.subscribe(OrderStartedIntegrationEvent.class, OrderStartedIntegrationEventHandler.class);
 			log.info("--- Basket service: subscribed to integration events");
 		};
 	}

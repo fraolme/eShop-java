@@ -3,7 +3,7 @@ package io.github.fraolme.event_bus_rabbitmq.integration_event_log;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.fraolme.event_bus_rabbitmq.events.IntegrationEvent;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class IntegrationEventLogService {
@@ -16,14 +16,14 @@ public class IntegrationEventLogService {
         this.objectMapper = objectMapper;
     }
 
-    public List<IntegrationEventLog> retrieveEventLogsPendingToPublish(UUID transactionId) {
-        return repository.findByTransactionIdAndState(transactionId.toString(), EventState.NotPublished);
+    public Optional<IntegrationEventLog> getEventLog(UUID id) {
+        return repository.findById(id);
     }
 
-    public void saveEvent(IntegrationEvent event, UUID transactionId) {
+    public void saveEvent(IntegrationEvent event) {
         try {
             var content = objectMapper.writeValueAsString(event);
-            var eventLog = new IntegrationEventLog(event, content, transactionId);
+            var eventLog = new IntegrationEventLog(event, content);
             repository.saveAndFlush(eventLog);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

@@ -4,9 +4,11 @@ import io.github.fraolme.event_bus_rabbitmq.events.IntegrationEvent;
 
 public class OrderStatusChangedToShippedIntegrationEvent extends IntegrationEvent {
 
-    private final Long orderId;
-    private final String orderStatus;
-    private final String buyerName;
+    private Long orderId;
+    private String orderStatus;
+    private String buyerName;
+
+    public OrderStatusChangedToShippedIntegrationEvent() {}
 
     public OrderStatusChangedToShippedIntegrationEvent(Long orderId, String orderStatus, String buyerName) {
         this.orderId = orderId;

@@ -6,8 +6,10 @@ import java.util.List;
 
 public class OrderStockRejectedIntegrationEvent extends IntegrationEvent {
 
-    private final Long orderId;
-    private final List<ConfirmedOrderStockItem> orderStockItems;
+    private Long orderId;
+    private List<ConfirmedOrderStockItem> orderStockItems;
+
+    public OrderStockRejectedIntegrationEvent() {}
 
     public OrderStockRejectedIntegrationEvent(Long orderId, List<ConfirmedOrderStockItem> orderStockItems) {
         this.orderId = orderId;

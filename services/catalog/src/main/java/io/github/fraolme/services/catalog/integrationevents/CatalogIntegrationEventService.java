@@ -33,6 +33,6 @@ public class CatalogIntegrationEventService {
     }
 
     public void saveEvent(IntegrationEvent event) {
-        eventLogService.saveEvent(event, UUID.randomUUID());
+        eventLogService.saveEvent(event);
     }
 }

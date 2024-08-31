@@ -17,8 +17,8 @@ public class TransactionMiddleware implements Command.Middleware {
         log.info("--- Begin Transaction for {} {}", command.getClass().getName(), command);
         R response = next.invoke();
         log.info("--- Commit Transaction for {}", command.getClass().getName());
-        //TODO: call domain event handlers
-        //TODO: send integration events for the current transaction
         return response;
+        // integration events added with ApplicationEventPublisher in this pipeline will be sent when the transaction
+        // ends because we have @TransactionEventListener
     }
 }

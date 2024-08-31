@@ -5,7 +5,9 @@ import java.util.UUID;
 
 public class OrderStartedIntegrationEvent extends IntegrationEvent {
 
-    private final UUID userId;
+    private UUID userId;
+
+    public OrderStartedIntegrationEvent() {}
 
     public OrderStartedIntegrationEvent(UUID userId) {
         this.userId = userId;

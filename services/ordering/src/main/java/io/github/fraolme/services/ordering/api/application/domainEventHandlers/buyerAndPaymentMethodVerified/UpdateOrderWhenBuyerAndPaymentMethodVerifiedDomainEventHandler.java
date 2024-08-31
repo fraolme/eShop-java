@@ -5,7 +5,9 @@ import io.github.fraolme.services.ordering.domain.events.BuyerAndPaymentMethodVe
 import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UpdateOrderWhenBuyerAndPaymentMethodVerifiedDomainEventHandler
         implements Notification.Handler<BuyerAndPaymentMethodVerifiedDomainEvent> {
 

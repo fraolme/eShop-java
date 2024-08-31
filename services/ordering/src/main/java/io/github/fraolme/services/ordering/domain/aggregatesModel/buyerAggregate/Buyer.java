@@ -63,7 +63,7 @@ public class Buyer extends Entity implements IAggregateRoot {
             return existingPayment.get();
         }
 
-        var payment = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration);
+        var payment = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration, this);
         paymentMethods.add(payment);
 
         this.addDomainEvent(new BuyerAndPaymentMethodVerifiedDomainEvent(this, payment, orderId));

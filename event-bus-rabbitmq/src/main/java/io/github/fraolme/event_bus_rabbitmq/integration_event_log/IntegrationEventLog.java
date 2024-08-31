@@ -30,28 +30,15 @@ public class IntegrationEventLog {
     @Column(nullable = false)
     private ZonedDateTime creationTime;
 
-    private String transactionId;
-
     public IntegrationEventLog() {}
 
-    public IntegrationEventLog(IntegrationEvent event, String content, UUID transactionId) {
+    public IntegrationEventLog(IntegrationEvent event, String content) {
         this.eventId = event.getId();
         this.creationTime = event.getCreationDate();
-        this.eventTypeName = event.getClass().getSimpleName();
+        this.eventTypeName = event.getClass().getName(); // we need the fully qualified class name
         this.content = content;
         this.state = EventState.NotPublished;
         this.timeSent = 0;
-        this.transactionId = transactionId.toString();
-    }
-
-    public IntegrationEvent parseContent() {
-        try {
-            Class<? extends IntegrationEvent> eventType = (Class<? extends IntegrationEvent>) Class.forName(this.eventTypeName);
-            ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(this.content, eventType);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public UUID getEventId() {
@@ -76,10 +63,6 @@ public class IntegrationEventLog {
 
     public ZonedDateTime getCreationTime() {
         return creationTime;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
     }
 
     public void setState(EventState state) {

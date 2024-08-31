@@ -9,8 +9,9 @@ import io.github.fraolme.services.ordering.infrastructure.repositories.BuyerRepo
 import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class OrderCancelledDomainEventHandler implements Notification.Handler<OrderCancelledDomainEvent> {
 
     private final Logger log = LoggerFactory.getLogger(OrderCancelledDomainEventHandler.class);

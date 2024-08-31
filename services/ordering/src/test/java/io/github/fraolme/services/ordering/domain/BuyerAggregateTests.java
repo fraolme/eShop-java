@@ -25,7 +25,7 @@ public class BuyerAggregateTests {
         // act
         var fakeBuyerItem = new Buyer(identity, name);
 
-        // asset
+        // assert
         assertNotNull(fakeBuyerItem);
     }
 
@@ -49,16 +49,16 @@ public class BuyerAggregateTests {
         var orderId = 1L;
         var name = "fakeUser";
         var identity = UUID.randomUUID();
-        var fakeBuyerItem = new Buyer(identity, name);
+        var fakeBuyer= new Buyer(identity, name);
 
         // act
-        var result = fakeBuyerItem.verifyOrAddPaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName,
+        var result = fakeBuyer.verifyOrAddPaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName,
                 expiration, orderId);
 
         // assert
         assertNotNull(result);
-        assertEquals(fakeBuyerItem.getDomainEvents().size(), 1);
-        assertEquals(fakeBuyerItem.getDomainEvents().get(0).getClass(), BuyerAndPaymentMethodVerifiedDomainEvent.class);
+        assertEquals(fakeBuyer.getDomainEvents().size(), 1);
+        assertEquals(fakeBuyer.getDomainEvents().get(0).getClass(), BuyerAndPaymentMethodVerifiedDomainEvent.class);
     }
 
     @Test
@@ -71,8 +71,11 @@ public class BuyerAggregateTests {
         var cardHolderName = "FakeHolderName";
         var expiration = ZonedDateTime.now().plusYears(1);
 
+        var name = "fakeUser";
+        var identity = UUID.randomUUID();
+        var fakeBuyer= new Buyer(identity, name);
         // act
-        var paymentMethod = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration);
+        var paymentMethod = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration, fakeBuyer);
 
         // assert
         assertNotNull(paymentMethod);
@@ -88,9 +91,12 @@ public class BuyerAggregateTests {
         var cardHolderName = "FakeHolderName";
         var expiration = ZonedDateTime.now().plusYears(-1);
 
+        var name = "fakeUser";
+        var identity = UUID.randomUUID();
+        var fakeBuyer= new Buyer(identity, name);
         // act - assert
         assertThrows(OrderingDomainException.class, () -> new PaymentMethod(cardType, alias, cardNumber,
-                securityNumber, cardHolderName, expiration));
+                securityNumber, cardHolderName, expiration, fakeBuyer));
     }
 
     @Test
@@ -103,8 +109,11 @@ public class BuyerAggregateTests {
         var cardHolderName = "FakeHolderName";
         var expiration = ZonedDateTime.now().plusYears(1);
 
+        var name = "fakeUser";
+        var identity = UUID.randomUUID();
+        var fakeBuyer= new Buyer(identity, name);
         // act
-        var paymentMethod = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration);
+        var paymentMethod = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration, fakeBuyer);
         var result = paymentMethod.isEqualTo(cardType, cardNumber, expiration);
 
         // assert

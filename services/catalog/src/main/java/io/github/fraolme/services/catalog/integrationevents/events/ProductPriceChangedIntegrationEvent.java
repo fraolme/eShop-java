@@ -6,9 +6,11 @@ import java.math.BigDecimal;
 
 public class ProductPriceChangedIntegrationEvent extends IntegrationEvent {
 
-    private final Long productId;
-    private final BigDecimal newPrice;
-    private final BigDecimal oldPrice;
+    private Long productId;
+    private BigDecimal newPrice;
+    private BigDecimal oldPrice;
+
+    public ProductPriceChangedIntegrationEvent() {}
 
     public ProductPriceChangedIntegrationEvent(Long productId, BigDecimal newPrice, BigDecimal oldPrice) {
         this.productId = productId;

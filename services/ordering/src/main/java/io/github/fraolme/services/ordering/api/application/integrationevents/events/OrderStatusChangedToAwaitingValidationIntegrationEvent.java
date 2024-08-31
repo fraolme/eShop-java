@@ -6,10 +6,12 @@ import java.util.List;
 
 public class OrderStatusChangedToAwaitingValidationIntegrationEvent extends IntegrationEvent {
 
-    private final Long orderId;
-    private final String orderStatus;
-    private final String buyerName;
-    private final List<OrderStockItem> orderStockItems;
+    private Long orderId;
+    private String orderStatus;
+    private String buyerName;
+    private List<OrderStockItem> orderStockItems;
+
+    public OrderStatusChangedToAwaitingValidationIntegrationEvent(){}
 
     public OrderStatusChangedToAwaitingValidationIntegrationEvent(Long orderId, String orderStatus, String buyerName,
                                                                   List<OrderStockItem> orderStockItems) {
