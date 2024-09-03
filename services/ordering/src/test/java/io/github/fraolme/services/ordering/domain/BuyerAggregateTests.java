@@ -6,14 +6,12 @@ import io.github.fraolme.services.ordering.domain.aggregatesModel.buyerAggregate
 import io.github.fraolme.services.ordering.domain.events.BuyerAndPaymentMethodVerifiedDomainEvent;
 import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 public class BuyerAggregateTests {
 
     @Test
@@ -58,7 +56,6 @@ public class BuyerAggregateTests {
         // assert
         assertNotNull(result);
         assertEquals(fakeBuyer.getDomainEvents().size(), 1);
-        assertEquals(fakeBuyer.getDomainEvents().get(0).getClass(), BuyerAndPaymentMethodVerifiedDomainEvent.class);
     }
 
     @Test

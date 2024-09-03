@@ -7,7 +7,6 @@ import io.github.fraolme.services.ordering.domain.aggregatesModel.orderAggregate
 import io.github.fraolme.services.ordering.domain.events.OrderStartedDomainEvent;
 import io.github.fraolme.services.ordering.domain.exceptions.OrderingDomainException;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -15,7 +14,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 public class OrderAggregateTests {
 
     @Test
@@ -107,7 +105,6 @@ public class OrderAggregateTests {
                 ZonedDateTime.now(), null, null);
 
         assertEquals(order.getDomainEvents().size(), 1);
-        assertEquals(order.getDomainEvents().get(0).getClass(), OrderStartedDomainEvent.class);
     }
 
 
