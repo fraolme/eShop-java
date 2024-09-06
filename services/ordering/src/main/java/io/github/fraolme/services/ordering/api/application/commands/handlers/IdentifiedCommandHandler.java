@@ -8,18 +8,16 @@ import io.github.fraolme.services.ordering.api.application.commands.IdentifiedCo
 import io.github.fraolme.services.ordering.api.application.commands.ShipOrderCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class IdentifiedCommandHandler<T extends Command<R>, R> implements Command.Handler<IdentifiedCommand<T, R>, R> {
 
-    private static final Logger log = LoggerFactory.getLogger(CreateOrderCommandHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(IdentifiedCommandHandler.class);
+    private final Pipeline pipeline;
 
-    @Autowired
-    private Pipeline pipeline;
-
-    public IdentifiedCommandHandler() {
+    public IdentifiedCommandHandler(Pipeline pipeline) {
+        this.pipeline = pipeline;
     }
 
     @Override
