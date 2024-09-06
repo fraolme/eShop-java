@@ -10,6 +10,7 @@ import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepo
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -30,15 +31,16 @@ public class CreateOrderCommandHandlerTests {
     @Mock
     OrderingIntegrationEventService orderingIntegrationEventService;
 
-    CreateOrderCommand command;
+    @InjectMocks
     CreateOrderCommandHandler createOrderCommandHandler;
+
+    CreateOrderCommand command;
 
     @BeforeEach
     void setUp() {
         var orderItems = List.of(new OrderItemDTO(1L, "Chair", new BigDecimal("19.5"), new BigDecimal("0"), 2, "" ));
         this.command = new CreateOrderCommand(orderItems, UUID.randomUUID(), "jj", "NN", "NN", "NN", "UU", "000",
                 "111", "JJ", ZonedDateTime.now().plusYears(1), "777", 1L);
-        this.createOrderCommandHandler = new CreateOrderCommandHandler(this.orderRepository, this.orderingIntegrationEventService);
     }
 
     //NOTE: couldn't mock order since it is created in the method

@@ -7,6 +7,7 @@ import io.github.fraolme.services.ordering.infrastructure.repositories.OrderRepo
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -22,14 +23,15 @@ public class SetStockRejectedOrderStatusCommandHandlerTests {
     @Mock
     OrderRepository orderRepository;
 
-    SetStockRejectedOrderStatusCommand command;
+    @InjectMocks
     SetStockRejectedOrderStatusCommandHandler handler;
+
+    SetStockRejectedOrderStatusCommand command;
     Long orderId = 7L;
 
     @BeforeEach
     void setUp(){
         this.command = new SetStockRejectedOrderStatusCommand(this.orderId, List.of(2L));
-        this.handler = new SetStockRejectedOrderStatusCommandHandler(orderRepository);
     }
 
     @Test
