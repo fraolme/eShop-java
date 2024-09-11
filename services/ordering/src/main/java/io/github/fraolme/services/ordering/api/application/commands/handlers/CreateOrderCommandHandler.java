@@ -44,10 +44,7 @@ public class CreateOrderCommandHandler implements Command.Handler<CreateOrderCom
             }
         }
 
-        //TODO: use structured logging with Serilog or others to log all properties of order
         log.info("--- Creating Order - Order: {}", order);
-
-        //TODO: Unit Of Work to execute the saving of order with the Domain events in a single transaction
         orderRepository.save(order);
 
         return new Voidy();

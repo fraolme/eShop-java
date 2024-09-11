@@ -7,6 +7,7 @@ import io.github.fraolme.services.ordering.api.application.commands.CreateOrderC
 import io.github.fraolme.services.ordering.api.application.commands.IdentifiedCommand;
 import io.github.fraolme.services.ordering.api.application.commands.ShipOrderCommand;
 import io.github.fraolme.services.ordering.api.application.commands.handlers.IdentifiedCommandHandler;
+import io.github.fraolme.services.ordering.infrastructure.idempotency.RequestManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +25,9 @@ public class IdentifiedCommandHandlerTests {
 
     @Mock
     Pipeline pipeline;
+
+    @Mock
+    RequestManager requestManager;
 
     @InjectMocks
     IdentifiedCommandHandler handler;
@@ -87,5 +91,22 @@ public class IdentifiedCommandHandlerTests {
 
         // assert
         assertNull(result);
+    }
+
+    @Test
+    public void idempotencyCheckWorks() {
+        // arrange
+        var orderId = 7L;
+        ShipOrderCommand command = new ShipOrderCommand(orderId);
+        var requestId = UUID.randomUUID();
+        IdentifiedCommand<ShipOrderCommand, Voidy> identifiedCommand = new IdentifiedCommand<>(command, requestId);
+        when(requestManager.requestExists(requestId)).thenReturn(true);
+
+        // act
+        var result = handler.handle(identifiedCommand);
+
+        // assert
+        assertNull(result);
+        verify(pipeline, never()).send(any(ShipOrderCommand.class));
     }
 }

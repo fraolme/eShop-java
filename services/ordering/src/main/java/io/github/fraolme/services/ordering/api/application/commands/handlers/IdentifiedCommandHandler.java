@@ -6,6 +6,7 @@ import io.github.fraolme.services.ordering.api.application.commands.CancelOrderC
 import io.github.fraolme.services.ordering.api.application.commands.CreateOrderCommand;
 import io.github.fraolme.services.ordering.api.application.commands.IdentifiedCommand;
 import io.github.fraolme.services.ordering.api.application.commands.ShipOrderCommand;
+import io.github.fraolme.services.ordering.infrastructure.idempotency.RequestManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,20 +16,26 @@ public class IdentifiedCommandHandler<T extends Command<R>, R> implements Comman
 
     private static final Logger log = LoggerFactory.getLogger(IdentifiedCommandHandler.class);
     private final Pipeline pipeline;
+    private final RequestManager requestManager;
 
-    public IdentifiedCommandHandler(Pipeline pipeline) {
+    public IdentifiedCommandHandler(Pipeline pipeline, RequestManager requestManager) {
         this.pipeline = pipeline;
+        this.requestManager = requestManager;
     }
 
     @Override
     public R handle(IdentifiedCommand<T,R> identifiedCommand) {
-        //TODO: idempotency check check if request is already processed by uuid
-
-        //TODO: save request for idempotency check later
-
         try {
+            // idempotency check
+            var alreadyExists = requestManager.requestExists(identifiedCommand.id());
+            if(alreadyExists) {
+                return null;
+            }
             var command = identifiedCommand.command();
-            var commandName = command.getClass().getName();
+            var commandName = command.getClass().getSimpleName();
+
+            requestManager.createRequestForCommand(identifiedCommand.id(), commandName);
+
             var idProperty = "";
             var commandId = "";
 
