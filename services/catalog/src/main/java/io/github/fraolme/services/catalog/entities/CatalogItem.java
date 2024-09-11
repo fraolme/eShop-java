@@ -3,8 +3,8 @@ package io.github.fraolme.services.catalog.entities;
 import io.github.fraolme.services.catalog.exceptions.CatalogDomainException;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
-//TODO: add equals and hashcode
 @Entity
 @NamedEntityGraph(name = "catalog_item_entity_graph", attributeNodes = {
         @NamedAttributeNode("catalogBrand"),
@@ -167,5 +167,17 @@ public class CatalogItem {
         }
         this.onReorder = false;
         return this.availableStock - original;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CatalogItem that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

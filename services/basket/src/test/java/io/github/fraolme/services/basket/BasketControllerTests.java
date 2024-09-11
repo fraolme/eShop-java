@@ -2,12 +2,14 @@ package io.github.fraolme.services.basket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.github.fraolme.event_bus_rabbitmq.EventBusRabbitMQ;
 import io.github.fraolme.services.basket.controllers.BasketController;
 import io.github.fraolme.services.basket.models.BasketCheckout;
 import io.github.fraolme.services.basket.models.CustomerBasket;
 import io.github.fraolme.services.basket.repositories.RedisBasketRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -19,15 +21,14 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BasketController.class)
+@AutoConfigureMockMvc(addFilters = false) // to disable security
 public class BasketControllerTests {
 
     @Autowired
@@ -35,6 +36,9 @@ public class BasketControllerTests {
 
     @MockBean
     private RedisBasketRepository redisBasketRepository;
+
+    @MockBean
+    private EventBusRabbitMQ eventBus;
 
     @Test
     void getCustomerBasketSuccess() throws Exception {

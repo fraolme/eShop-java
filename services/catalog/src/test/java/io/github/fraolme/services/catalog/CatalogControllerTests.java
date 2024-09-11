@@ -2,6 +2,7 @@ package io.github.fraolme.services.catalog;
 
 import io.github.fraolme.services.catalog.controllers.CatalogController;
 import io.github.fraolme.services.catalog.entities.CatalogItem;
+import io.github.fraolme.services.catalog.integrationevents.CatalogIntegrationEventService;
 import io.github.fraolme.services.catalog.repositories.CatalogBrandRepository;
 import io.github.fraolme.services.catalog.repositories.CatalogItemRepository;
 import io.github.fraolme.services.catalog.repositories.CatalogTypeRepository;
@@ -9,14 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -25,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CatalogController.class)
+@ContextConfiguration(classes = {CatalogController.class, TestConfig.class}) // added TestConfig to mock our custom beans
+@ActiveProfiles("test") // need this to activate the TestConfig beans only during testing
 public class CatalogControllerTests {
 
     @Autowired
@@ -38,6 +43,9 @@ public class CatalogControllerTests {
 
     @MockBean
     private CatalogBrandRepository catalogBrandRepositoryMock;
+
+    @MockBean
+    private CatalogIntegrationEventService catalogIntegrationEventService;
 
     @Test
     void getItemsShouldReturnCatalogItemsPage() throws Exception {

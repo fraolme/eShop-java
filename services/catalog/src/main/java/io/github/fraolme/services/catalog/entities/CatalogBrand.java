@@ -2,10 +2,10 @@ package io.github.fraolme.services.catalog.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-//TODO: add equals and hashcode
+import java.util.Objects;
+
 @Entity
 public class CatalogBrand {
     @Id @GeneratedValue
@@ -24,6 +24,18 @@ public class CatalogBrand {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CatalogBrand that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     public String getBrand() {
