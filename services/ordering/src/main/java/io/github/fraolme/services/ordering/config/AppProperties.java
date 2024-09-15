@@ -14,11 +14,19 @@ public class AppProperties {
     @Value("${keycloak.auth-server-url}")
     private String authServerUrl;
 
+    @Value("${spring.application.graceperiodtime}")
+    private int gracePeriodTime;
+
     public String getRealm() {
         return this.realm;
     }
 
     public  String getAuthServerUrl() {
         return this.authServerUrl;
+    }
+
+    // grace period in minutes
+    public int getGracePeriodTime() {
+        return this.gracePeriodTime;
     }
 }

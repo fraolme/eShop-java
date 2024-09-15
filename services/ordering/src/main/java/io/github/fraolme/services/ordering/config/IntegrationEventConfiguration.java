@@ -25,7 +25,6 @@ public class IntegrationEventConfiguration {
     @Bean
     public CommandLineRunner integrationEventSubscribe(EventBusRabbitMQ eventBus) {
         return args -> {
-            eventBus.subscribe(GracePeriodConfirmedIntegrationEvent.class, GracePeriodConfirmedIntegrationEventHandler.class);
             eventBus.subscribe(OrderPaymentFailedIntegrationEvent.class, OrderPaymentFailedIntegrationEventHandler.class);
             eventBus.subscribe(OrderPaymentSucceededIntegrationEvent.class, OrderPaymentSucceededIntegrationEventHandler.class);
             eventBus.subscribe(OrderStockConfirmedIntegrationEvent.class, OrderStockConfirmedIntegrationEventHandler.class);

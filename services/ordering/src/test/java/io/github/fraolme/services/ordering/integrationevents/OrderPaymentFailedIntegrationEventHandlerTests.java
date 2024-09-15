@@ -2,10 +2,7 @@ package io.github.fraolme.services.ordering.integrationevents;
 
 import an.awesome.pipelinr.Pipeline;
 import io.github.fraolme.services.ordering.api.application.commands.CancelOrderCommand;
-import io.github.fraolme.services.ordering.api.application.commands.SetAwaitingValidationOrderStatusCommand;
-import io.github.fraolme.services.ordering.api.application.integrationevents.events.GracePeriodConfirmedIntegrationEvent;
 import io.github.fraolme.services.ordering.api.application.integrationevents.events.OrderPaymentFailedIntegrationEvent;
-import io.github.fraolme.services.ordering.api.application.integrationevents.handlers.GracePeriodConfirmedIntegrationEventHandler;
 import io.github.fraolme.services.ordering.api.application.integrationevents.handlers.OrderPaymentFailedIntegrationEventHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
