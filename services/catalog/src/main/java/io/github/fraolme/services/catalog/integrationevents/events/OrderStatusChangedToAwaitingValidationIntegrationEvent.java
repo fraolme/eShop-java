@@ -7,6 +7,7 @@ import java.util.List;
 public class OrderStatusChangedToAwaitingValidationIntegrationEvent extends IntegrationEvent {
 
     private Long orderId;
+    private String orderStatus;
     private List<OrderStockItem> orderStockItems;
 
     public OrderStatusChangedToAwaitingValidationIntegrationEvent() {
@@ -31,6 +32,10 @@ public class OrderStatusChangedToAwaitingValidationIntegrationEvent extends Inte
 
     public void setOrderStockItems(List<OrderStockItem> orderStockItems) {
         this.orderStockItems = orderStockItems;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
     }
 }
 

@@ -1,0 +1,80 @@
+
+services:
+  basketdata:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - eshop-basketdata:/data
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  identity:
+    build:
+      context: services/identity/
+      dockerfile: Dockerfile
+    image: eshop-identity-latest
+    ports:
+      - "8080:8080"
+
+  basket:
+    build:
+      context: .
+      dockerfile: services/basket/Dockerfile
+    depends_on:
+      basketdata:
+        condition: service_started
+      identity:
+        condition: service_started
+      rabbitmq:
+          condition: service_healthy
+    image: eshop-basket-latest
+    ports:
+      - "8082:8082"
+
+  catalog:
+    build:
+      context: .
+      dockerfile: services/catalog/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+    image: eshop-catalog-latest
+    ports:
+      - "8081:8081"
+
+  ordering:
+    build:
+      context: .
+      dockerfile: services/ordering/Dockerfile
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      identity:
+        condition: service_started
+    image: eshop-ordering-latest
+    ports:
+      - "8083:8083"
+
+  payment:
+    build:
+      context: .
+      dockerfile: services/payment/Dockerfile
+    depends_on:
+      rabbitmq:
+          condition: service_healthy
+    image: eshop-payment-latest
+
+volumes:
+  eshop-basketdata:
+    external: false
