@@ -1,7 +1,25 @@
 
 services:
+  postgresdata:
+    image: postgres:14.5
+    container_name: eshop-postgres
+    environment:
+      POSTGRES_USER: eshop_user
+      POSTGRES_PASSWORD: eshop_password
+      POSTGRES_DB: eshop
+    ports:
+      - "15432:5432"
+    volumes:
+      - eshop-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eshop_user -d postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
   basketdata:
     image: redis:alpine
+    container_name: eshop-redis
     ports:
       - "6379:6379"
     volumes:
@@ -9,6 +27,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
+    container_name: eshop-rabbitmq
     ports:
       - "15672:15672"
       - "5672:5672"
@@ -23,8 +42,9 @@ services:
       context: services/identity/
       dockerfile: Dockerfile
     image: eshop-identity-latest
+    container_name: eshop-identity
     ports:
-      - "8080:8080"
+      - "8084:8080"
 
   basket:
     build:
@@ -38,8 +58,12 @@ services:
       rabbitmq:
           condition: service_healthy
     image: eshop-basket-latest
+    container_name: eshop-basket
     ports:
       - "8082:8082"
+    environment:
+      ESHOP_REDIS_HOST: basketdata
+      ESHOP_RABBITMQ_HOST: rabbitmq
 
   catalog:
     build:
@@ -48,10 +72,19 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      postgresdata:
+        condition: service_healthy
 
     image: eshop-catalog-latest
+    container_name: eshop-catalog
     ports:
       - "8081:8081"
+    environment:
+      # the containers are in the same network,so they use the internal postgres port 5432
+      ESHOP_DATABASE_URL: jdbc:postgresql://postgresdata:5432/eshop
+      ESHOP_DATABASE_USERNAME: eshop_user
+      ESHOP_DATABASE_PASSWORD: eshop_password
+      ESHOP_RABBITMQ_HOST: rabbitmq
 
   ordering:
     build:
@@ -62,7 +95,16 @@ services:
         condition: service_healthy
       identity:
         condition: service_started
+      postgresdata:
+        condition: service_healthy
+    environment:
+      ESHOP_DATABASE_URL: jdbc:postgresql://postgresdata:5432/eshop
+      ESHOP_DATABASE_USERNAME: eshop_user
+      ESHOP_DATABASE_PASSWORD: eshop_password
+      ESHOP_RABBITMQ_HOST: rabbitmq
+
     image: eshop-ordering-latest
+    container_name: eshop-ordering
     ports:
       - "8083:8083"
 
@@ -72,9 +114,17 @@ services:
       dockerfile: services/payment/Dockerfile
     depends_on:
       rabbitmq:
-          condition: service_healthy
+        condition: service_healthy
+      postgresdata:
+        condition: service_healthy
+
     image: eshop-payment-latest
+    container_name: eshop-payment
+    environment:
+      ESHOP_RABBITMQ_HOST: rabbitmq
 
 volumes:
   eshop-basketdata:
+    external: false
+  eshop-postgres-data:
     external: false
