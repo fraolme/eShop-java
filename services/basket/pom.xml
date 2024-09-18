@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.fraolme.services</groupId>
 	<artifactId>basket</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Basket</name>
 	<description>Basket Microservice</description>
 	<properties>
@@ -51,7 +51,6 @@
             <groupId>io.github.fraolme</groupId>
             <artifactId>event-bus-rabbitmq</artifactId>
             <version>1.0.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -44,7 +44,7 @@ services:
     image: eshop-identity-latest
     container_name: eshop-identity
     ports:
-      - "8084:8080"
+      - "8080:8080"
 
   basket:
     build:
@@ -64,6 +64,10 @@ services:
     environment:
       ESHOP_REDIS_HOST: basketdata
       ESHOP_RABBITMQ_HOST: rabbitmq
+      KEYCLOAK_URL: http://localhost:8080
+      KEYCLOAK_ISSUER_URL: http://identity:8080/realms/eshop
+    volumes:
+      - maven-cache:/root/.m2
 
   catalog:
     build:
@@ -74,6 +78,8 @@ services:
         condition: service_healthy
       postgresdata:
         condition: service_healthy
+      basket:
+        condition: service_started
 
     image: eshop-catalog-latest
     container_name: eshop-catalog
@@ -85,6 +91,8 @@ services:
       ESHOP_DATABASE_USERNAME: eshop_user
       ESHOP_DATABASE_PASSWORD: eshop_password
       ESHOP_RABBITMQ_HOST: rabbitmq
+    volumes:
+      - maven-cache:/root/.m2
 
   ordering:
     build:
@@ -97,16 +105,22 @@ services:
         condition: service_started
       postgresdata:
         condition: service_healthy
+      catalog:
+        condition: service_started
     environment:
       ESHOP_DATABASE_URL: jdbc:postgresql://postgresdata:5432/eshop
       ESHOP_DATABASE_USERNAME: eshop_user
       ESHOP_DATABASE_PASSWORD: eshop_password
       ESHOP_RABBITMQ_HOST: rabbitmq
+      KEYCLOAK_URL: http://localhost:8080
+      KEYCLOAK_ISSUER_URL: http://identity:8080/realms/eshop
 
     image: eshop-ordering-latest
     container_name: eshop-ordering
     ports:
       - "8083:8083"
+    volumes:
+      - maven-cache:/root/.m2
 
   payment:
     build:
@@ -117,14 +131,19 @@ services:
         condition: service_healthy
       postgresdata:
         condition: service_healthy
+      ordering:
+        condition: service_started
 
     image: eshop-payment-latest
     container_name: eshop-payment
     environment:
       ESHOP_RABBITMQ_HOST: rabbitmq
+    volumes:
+      - maven-cache:/root/.m2
 
 volumes:
   eshop-basketdata:
     external: false
   eshop-postgres-data:
     external: false
+  maven-cache:

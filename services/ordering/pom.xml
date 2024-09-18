@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.fraolme.services</groupId>
 	<artifactId>ordering</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Ordering</name>
 	<description>Ordering Microservice</description>
 	<properties>
@@ -62,7 +62,6 @@
             <groupId>io.github.fraolme</groupId>
             <artifactId>event-bus-rabbitmq</artifactId>
             <version>1.0.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -4,17 +4,9 @@ WORKDIR /app
 
 COPY ../  .
 
-# Install the local package
-WORKDIR /app/event-bus-rabbitmq
-RUN mvn install
+RUN mvn install -DskipTests
 
-WORKDIR /app/services/ordering
-# download dependencies without running the full build
-RUN mvn dependency:go-offline
-
-RUN mvn clean package -DskipTests
-
-FROM openjdk:17-alpine AS runtime
+FROM eclipse-temurin:17-jre-alpine AS runtime
 
 WORKDIR /app
 
