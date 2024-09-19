@@ -44,7 +44,7 @@ services:
     image: eshop-identity-latest
     container_name: eshop-identity
     ports:
-      - "8080:8080"
+      - "8084:8080"
 
   basket:
     build:
@@ -64,8 +64,8 @@ services:
     environment:
       ESHOP_REDIS_HOST: basketdata
       ESHOP_RABBITMQ_HOST: rabbitmq
-      KEYCLOAK_URL: http://localhost:8080
-      KEYCLOAK_ISSUER_URL: http://identity:8080/realms/eshop
+      KEYCLOAK_URL: http://localhost:8084
+      KEYCLOAK_ISSUER_URL: http://localhost:8084/realms/eshop
     volumes:
       - maven-cache:/root/.m2
 
@@ -112,8 +112,8 @@ services:
       ESHOP_DATABASE_USERNAME: eshop_user
       ESHOP_DATABASE_PASSWORD: eshop_password
       ESHOP_RABBITMQ_HOST: rabbitmq
-      KEYCLOAK_URL: http://localhost:8080
-      KEYCLOAK_ISSUER_URL: http://identity:8080/realms/eshop
+      KEYCLOAK_URL: http://localhost:8084
+      KEYCLOAK_ISSUER_URL: http://localhost:8084/realms/eshop
 
     image: eshop-ordering-latest
     container_name: eshop-ordering
